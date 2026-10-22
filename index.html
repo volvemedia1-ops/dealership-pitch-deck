@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Credit Builder Flow — Dealership Presentation V3.1</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    background-color: #000000;
+    color: #ffffff;
+    font-family: 'Montserrat', 'Inter', -apple-system, sans-serif;
+    overflow: hidden;
+    user-select: none;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Deck Viewport ── */
+  .deck-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #000000;
+  }
+
+  .slide {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    pointer-events: none;
+  }
+
+  .slide.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  /* ── Image Slide Display (100% native Canva fidelity) ── */
+  .slide-img {
+    max-width: 100vw;
+    max-height: 100vh;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    box-shadow: 0 0 50px rgba(0,0,0,0.8);
+  }
+
+  /* ── Custom Edited Slide Styling (Matches Canva Dark Aesthetic Exactly) ── */
+  .custom-slide {
+    width: 100vw;
+    height: 100vh;
+    max-width: 1920px;
+    max-height: 1080px;
+    aspect-ratio: 16 / 9;
+    padding: 60px 100px 90px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: #000000;
+    position: relative;
+    box-sizing: border-box;
+  }
+
+  .custom-slide h1 {
+    font-size: 46px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    text-align: center;
+    line-height: 1.25;
+    margin-bottom: 24px;
+    color: #ffffff;
+    max-width: 1200px;
+  }
+
+  .custom-slide .underline-title {
+    text-decoration: underline;
+    text-underline-offset: 12px;
+    text-decoration-thickness: 3px;
+    text-decoration-color: #ffffff;
+  }
+
+  /* ── Slide 6 Custom Layout ── */
+  .s6-graphic-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 30px;
+    gap: 24px;
+  }
+
+  .s6-icon-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+  }
+
+  .s6-badge-row {
+    display: flex;
+    gap: 16px;
+    margin-top: 10px;
+  }
+
+  .s6-badge {
+    background: #111116;
+    border: 1px solid #2a2a38;
+    color: #a0a0b8;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 8px 18px;
+    border-radius: 24px;
+  }
+
+  .s6-callout {
+    font-size: 26px;
+    font-weight: 800;
+    color: #ff4757;
+    text-align: center;
+    margin-top: 36px;
+    line-height: 1.4;
+  }
+
+  .s6-subnote {
+    font-size: 16px;
+    color: #8888a0;
+    text-align: center;
+    margin-top: 8px;
+  }
+
+  /* ── Slide 7 Custom Layout (2 Personas Architecture) ── */
+  .s7-wrap {
+    width: 100%;
+    max-width: 1160px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+
+  .s7-header {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+
+  .s7-kicker {
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    color: #00d4aa;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  .s7-title {
+    font-size: 44px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: #ffffff;
+    margin: 0 0 12px 0;
+  }
+
+  .s7-subtitle {
+    font-size: 16px;
+    color: #88889a;
+    max-width: 860px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  .s7-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    width: 100%;
+    max-width: 1160px;
+  }
+
+  .s7-card {
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 14px;
+    padding: 28px 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .s7-card.recoverable {
+    border: 1px solid rgba(0, 212, 170, 0.35);
+    background: rgba(0, 212, 170, 0.03);
+    box-shadow: 0 0 35px rgba(0, 212, 170, 0.06);
+  }
+
+  .s7-card.unrecoverable {
+    border: 1px solid rgba(255, 71, 87, 0.3);
+    background: rgba(255, 71, 87, 0.02);
+  }
+
+  .s7-card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .s7-badge-tag {
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 20px;
+  }
+
+  .s7-badge-tag.rec {
+    background: rgba(0, 212, 170, 0.15);
+    color: #00d4aa;
+    border: 1px solid rgba(0, 212, 170, 0.4);
+  }
+
+  .s7-badge-tag.unrec {
+    background: rgba(255, 71, 87, 0.15);
+    color: #ff4757;
+    border: 1px solid rgba(255, 71, 87, 0.4);
+  }
+
+  .s7-card-action {
+    font-size: 13px;
+    font-weight: 600;
+    color: #a0a0b0;
+  }
+
+  .s7-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .s7-list li {
+    font-size: 15.5px;
+    line-height: 1.55;
+    color: #d0d0d8;
+    position: relative;
+    padding-left: 26px;
+  }
+
+  .s7-list li::before {
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-weight: 800;
+    font-size: 17px;
+  }
+
+  .s7-card.recoverable .s7-list li::before {
+    content: "✓";
+    color: #00d4aa;
+  }
+
+  .s7-card.unrecoverable .s7-list li::before {
+    content: "✕";
+    color: #ff4757;
+  }
+
+  .s7-list li strong {
+    color: #ffffff;
+    font-weight: 700;
+  }
+
+  /* ── Slide 10 Custom Table ── */
+  .s10-table {
+    width: 100%;
+    max-width: 1200px;
+    border-collapse: collapse;
+    background: #000000;
+    margin-top: 10px;
+    border: 1px solid #333333;
+  }
+
+  .s10-table th, .s10-table td {
+    padding: 16px 20px;
+    text-align: left;
+    border: 1px solid #333333;
+    font-size: 16px;
+    line-height: 1.4;
+  }
+
+  .s10-table th {
+    background: #111111;
+    font-weight: 700;
+    color: #ffffff;
+    font-size: 15px;
+  }
+
+  .s10-table td {
+    color: #e0e0e0;
+  }
+
+  .s10-table td.num {
+    text-align: center;
+    font-weight: 700;
+  }
+
+  .s10-table td.money {
+    font-weight: 800;
+    color: #00d4aa;
+  }
+
+  /* ── Bell Curve Animations & Styling (Slide 10) ── */
+  @keyframes drawBellStroke {
+    0% { stroke-dashoffset: 1400; }
+    100% { stroke-dashoffset: 0; }
+  }
+
+  @keyframes fadeInCurveFill {
+    0% { opacity: 0; transform: translateY(10px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes radarRipple {
+    0% { r: 6; opacity: 0.9; stroke-width: 2.5; }
+    50% { opacity: 0.5; }
+    100% { r: 26; opacity: 0; stroke-width: 0.5; }
+  }
+
+  @keyframes nodeHaloPulse {
+    0%, 100% { transform: scale(1); opacity: 0.25; }
+    50% { transform: scale(1.35); opacity: 0.55; }
+  }
+
+  @keyframes dropDashedLine {
+    0% { stroke-dashoffset: 260; opacity: 0; }
+    100% { stroke-dashoffset: 0; opacity: 0.6; }
+  }
+
+  .bell-curve-stroke {
+    stroke-dasharray: 1400;
+    stroke-dashoffset: 0;
+    animation: drawBellStroke 2.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .bell-curve-fill {
+    animation: fadeInCurveFill 1.6s ease-out 0.4s forwards;
+    opacity: 0;
+    transform-origin: bottom center;
+  }
+
+  .bell-indicator-line {
+    stroke-dasharray: 260;
+    stroke-dashoffset: 0;
+    animation: dropDashedLine 1s ease-out 1s backwards;
+  }
+
+  .bell-radar-ring {
+    animation: radarRipple 2.4s cubic-bezier(0.1, 0.8, 0.2, 1) infinite;
+  }
+
+  .bell-radar-ring-delayed {
+    animation: radarRipple 2.4s cubic-bezier(0.1, 0.8, 0.2, 1) infinite 1.2s;
+  }
+
+  .bell-pulse-halo {
+    animation: nodeHaloPulse 2.5s ease-in-out infinite;
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  /* ── Slide 10 Minimal Bell Curve Layout ── */
+  .s10-minimal-wrap {
+    width: 100%;
+    max-width: 1100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 40px;
+    box-sizing: border-box;
+  }
+
+  .s10-header {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+
+  .s10-kicker {
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 2.5px;
+    color: #00d4aa;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .s10-title {
+    font-size: 40px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: #ffffff;
+    margin: 0;
+  }
+
+  .s10-curve-box {
+    width: 100%;
+    max-width: 980px;
+    margin-bottom: 24px;
+  }
+
+  .s10-svg {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .s10-pods-row {
+    display: grid;
+    grid-template-columns: 1fr 1.25fr 1fr;
+    gap: 20px;
+    width: 100%;
+    max-width: 980px;
+  }
+
+  .s10-pod {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 12px;
+    padding: 18px 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .s10-pod.featured {
+    background: rgba(0, 212, 170, 0.04);
+    border: 1px solid rgba(0, 212, 170, 0.35);
+    box-shadow: 0 0 25px rgba(0, 212, 170, 0.08);
+  }
+
+  .s10-pod-metric {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    line-height: 1.1;
+  }
+
+  .s10-pod-label {
+    font-size: 14px;
+    font-weight: 700;
+    color: #ffffff;
+    margin-top: 2px;
+  }
+
+  .s10-pod-desc {
+    font-size: 12px;
+    color: #88889a;
+    line-height: 1.4;
+  }
+
+  /* ── Slide 14 Custom Layout (Performance Partnership) ── */
+  .s14-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    width: 100%;
+    max-width: 1200px;
+    margin-top: 20px;
+  }
+
+  .s14-col h2 {
+    font-size: 26px;
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 8px;
+    margin-bottom: 28px;
+    color: #ffffff;
+  }
+
+  .s14-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+
+  .s14-list li {
+    font-size: 17px;
+    line-height: 1.55;
+    color: #d0d0d8;
+    position: relative;
+    padding-left: 28px;
+  }
+
+  .s14-list li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    top: -2px;
+    font-size: 26px;
+    color: #ffffff;
+  }
+
+  .s14-list li strong {
+    color: #ffffff;
+    font-weight: 700;
+  }
+
+  .s14-highlight {
+    color: #00d4aa !important;
+  }
+
+  /* ── Floating Navigation UI ── */
+  .nav-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.9) 70%);
+    z-index: 1000;
+  }
+
+  .nav-btn {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    padding: 8px 20px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+
+  .nav-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: #00d4aa;
+    color: #00d4aa;
+  }
+
+  .progress-wrap {
+    flex: 1;
+    max-width: 400px;
+    height: 4px;
+    background: #222222;
+    border-radius: 4px;
+    margin: 0 24px;
+    overflow: hidden;
+  }
+
+  .progress-bar {
+    height: 100%;
+    background: #00d4aa;
+    border-radius: 4px;
+    transition: width 0.3s ease;
+  }
+
+  .slide-indicator {
+    font-size: 13px;
+    font-weight: 600;
+    color: #888888;
+    letter-spacing: 1px;
+    min-width: 70px;
+    text-align: right;
+  }
+
+  .key-hint {
+    font-size: 11px;
+    color: #555555;
+    letter-spacing: 0.5px;
+  }
+</style>
+</head>
+<body>
+
+<div class="deck-container" id="deck">
+
+  <!-- SLIDE 1: Cover (Original Canva Slide) -->
+  <div class="slide active" data-slide="1">
+    <img src="slides_img/slide_1.png" class="slide-img" alt="Credit Builder Flow Presentation Cover">
+  </div>
+
+  <!-- SLIDE 2: Introduction Story (Original Canva Slide) -->
+  <div class="slide" data-slide="2">
+    <img src="slides_img/slide_2.png" class="slide-img" alt="Volve Media Introduction">
+  </div>
+
+  <!-- SLIDE 3: Client Results - Dashboard (Original Canva Slide) -->
+  <div class="slide" data-slide="3">
+    <img src="slides_img/slide_3.png" class="slide-img" alt="Client Results - Ad Campaigns & Lead Costs">
+  </div>
+
+  <!-- SLIDE 4: Client Results - Real Deliveries 1 (Original Canva Slide) -->
+  <div class="slide" data-slide="4">
+    <img src="slides_img/slide_4.png" class="slide-img" alt="Client Results - Vehicle Deliveries with Congratulations Ribbon">
+  </div>
+
+  <!-- SLIDE 5: Client Results - Real Deliveries 2 (Original Canva Slide) -->
+  <div class="slide" data-slide="5">
+    <img src="slides_img/slide_5.png" class="slide-img" alt="Client Results - Volkswagen Dealership Handovers">
+  </div>
+
+  <!-- SLIDE 6: EDITED — Rejection Reality (Universal to All Dealership Turn-Downs) -->
+  <div class="slide" data-slide="6">
+    <div class="custom-slide">
+      <h1 style="max-width: 1100px;">
+        Over 55% of Dealership Finance Applications Are Getting Rejected
+      </h1>
+      
+      <div class="s6-graphic-wrap">
+        <!-- SVG Graphic matching the original stick-figure dealer desk style cleanly without watermarks -->
+        <svg width="420" height="200" viewBox="0 0 500 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Table -->
+          <rect x="200" y="140" width="160" height="16" rx="4" fill="#FFFFFF"/>
+          <rect x="270" y="156" width="20" height="70" rx="3" fill="#FFFFFF"/>
+          <!-- F&I Manager / Underwriter on right -->
+          <circle cx="390" cy="80" r="24" fill="#FFFFFF"/>
+          <path d="M390 110 L390 170 L340 170" stroke="#FFFFFF" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M390 120 L310 95" stroke="#FFFFFF" stroke-width="14" stroke-linecap="round"/>
+          <!-- Chair right -->
+          <rect x="360" y="140" width="14" height="60" rx="2" fill="#888888"/>
+          <rect x="340" y="190" width="50" height="10" rx="2" fill="#888888"/>
+          <!-- Rejected Customer on left walking away disappointed -->
+          <circle cx="110" cy="95" r="22" fill="#FFFFFF"/>
+          <path d="M110 122 L110 180 L85 230" stroke="#FFFFFF" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M110 180 L135 230" stroke="#FFFFFF" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M110 135 L90 185" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round"/>
+        </svg>
+
+        <div class="s6-badge-row">
+          <span class="s6-badge">WesBank Automated Declines</span>
+          <span class="s6-badge">Absa Affordability Caps</span>
+          <span class="s6-badge">Standard Bank Scoring</span>
+          <span class="s6-badge">Nedbank MFC Tripwires</span>
+        </div>
+      </div>
+
+      <div class="s6-callout">
+        "You cannot advertise your way out of a credit problem."
+      </div>
+      <div class="s6-subnote">
+        More showroom traffic into a 55% decline bottleneck just wastes marketing budget.<br>
+        The real gross profit is unlocked by recovering the buyers you already paid to acquire.
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 7: The Two Lead Personas (CBF Scope vs Unrecoverable) -->
+  <div class="slide" data-slide="7">
+    <div class="custom-slide" style="padding: 40px 80px 80px;">
+      <div class="s7-wrap">
+        
+        <div class="s7-header">
+          <span class="s7-kicker">TRIAGE ARCHITECTURE</span>
+          <h1 class="s7-title">Who We Rescue vs. Who We Decline</h1>
+          <p class="s7-subtitle">
+            Filtering out unserviceable files immediately to protect your F&amp;I's time, conditioning only buyers with real delivery upside.
+          </p>
+        </div>
+
+        <div class="s7-grid">
+          <!-- Persona 1: Recoverable (CBF Scope) -->
+          <div class="s7-card recoverable">
+            <div class="s7-card-head">
+              <span class="s7-badge-tag rec">RECOVERABLE (CBF SCOPE)</span>
+              <span class="s7-card-action">Conditioned for Showroom Delivery</span>
+            </div>
+            <ul class="s7-list">
+              <li>
+                <strong>Verifiable Income &amp; Fit:</strong> Confirmed real earnings that mathematically support the vehicle installment tier.
+              </li>
+              <li>
+                <strong>Remediable Bureau Scars:</strong> 90-day bank conduct tripwires, debit reversals, or outdated bureau listings.
+              </li>
+              <li>
+                <strong>Structured 45-Day to 6-Month Horizons:</strong> Committed buyer progressing from fast-track bureau clearance up to 6-month deep restructuring.
+              </li>
+            </ul>
+          </div>
+
+          <!-- Persona 2: Unrecoverable (Filtered Out) -->
+          <div class="s7-card unrecoverable">
+            <div class="s7-card-head">
+              <span class="s7-badge-tag unrec">UNRECOVERABLE (FILTERED OUT)</span>
+              <span class="s7-card-action">Declined at Triage — Zero Time Wasted</span>
+            </div>
+            <ul class="s7-list">
+              <li>
+                <strong>Structural Affordability Deficit:</strong> Net disposable income mathematically cannot service the installment.
+              </li>
+              <li>
+                <strong>Active Statutory Debt Review:</strong> Formal Section 86 order legally blocking any new vehicle finance agreements.
+              </li>
+              <li>
+                <strong>Unsettled Civil Judgments:</strong> Open court judgments or sequestrations with zero capital or ability to settle.
+              </li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 8: Problem Statement (Original Canva Slide) -->
+  <div class="slide" data-slide="8">
+    <img src="slides_img/slide_7.png" class="slide-img" alt="Problem Statement - NCA Affordability, Historical Credit, Financial Behavior">
+  </div>
+
+  <!-- SLIDE 9: Our Innovative Solutions (Original Canva Slide) -->
+  <div class="slide" data-slide="9">
+    <img src="slides_img/slide_8.png" class="slide-img" alt="Our Innovative Solutions - NCA Restructuring, Trust Restoration, Behavior Audit">
+  </div>
+
+  <!-- SLIDE 10: AutoTrader 1-Star Review Proof (Original Canva Slide) -->
+  <div class="slide" data-slide="10">
+    <img src="slides_img/slide_9.png" class="slide-img" alt="AutoTrader Customer 1-Star Review: Declined Without Explanation">
+  </div>
+
+  <!-- SLIDE 11: The Lead Recovery Bell Curve (Minimal & Precise) -->
+  <div class="slide" data-slide="11">
+    <div class="s10-minimal-wrap">
+      
+      <div class="s10-header">
+        <span class="s10-kicker">RECOVERY HORIZONS</span>
+        <h1 class="s10-title">The Lead Recovery Bell Curve</h1>
+      </div>
+
+      <!-- High-Impact Animated SVG Bell Curve -->
+      <div class="s10-curve-box">
+        <svg viewBox="0 0 1000 270" class="s10-svg" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="bellStroke" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#60a5fa" />
+              <stop offset="35%" stop-color="#3b82f6" />
+              <stop offset="50%" stop-color="#00d4aa" />
+              <stop offset="65%" stop-color="#ffa502" />
+              <stop offset="100%" stop-color="#ff4757" />
+            </linearGradient>
+
+            <linearGradient id="bellFill" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#00d4aa" stop-opacity="0.30" />
+              <stop offset="60%" stop-color="#00d4aa" stop-opacity="0.08" />
+              <stop offset="100%" stop-color="#000000" stop-opacity="0.0" />
+            </linearGradient>
+
+            <filter id="curveGlow" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="4" result="blur" />
+              <feComposite in="SourceGraphic" in2="blur" operator="over" />
+            </filter>
+          </defs>
+
+          <!-- Subtle Background Grid -->
+          <line x1="60" y1="80" x2="940" y2="80" stroke="rgba(255,255,255,0.04)" stroke-dasharray="4 6" />
+          <line x1="60" y1="140" x2="940" y2="140" stroke="rgba(255,255,255,0.04)" stroke-dasharray="4 6" />
+
+          <!-- Shaded Area Under Bell Curve -->
+          <path class="bell-curve-fill" d="M 60 218 L 80 217 L 100 216 L 120 214 L 140 211 L 160 207 L 180 202 L 200 195 L 220 186 L 240 175 L 260 162 L 280 147 L 300 131 L 320 114 L 340 98 L 360 83 L 380 70 L 400 60 L 420 53 L 440 49 L 460 47 L 480 46 L 500 45 L 520 46 L 540 47 L 560 49 L 580 53 L 600 60 L 620 70 L 640 83 L 660 98 L 680 114 L 700 131 L 720 147 L 740 162 L 760 175 L 780 186 L 800 195 L 820 202 L 840 207 L 860 211 L 880 214 L 900 216 L 920 217 L 940 218 L 940 230 L 60 230 Z" fill="url(#bellFill)" />
+
+          <!-- Glowing Main Bell Curve Stroke -->
+          <path class="bell-curve-stroke" d="M 60 218 L 80 217 L 100 216 L 120 214 L 140 211 L 160 207 L 180 202 L 200 195 L 220 186 L 240 175 L 260 162 L 280 147 L 300 131 L 320 114 L 340 98 L 360 83 L 380 70 L 400 60 L 420 53 L 440 49 L 460 47 L 480 46 L 500 45 L 520 46 L 540 47 L 560 49 L 580 53 L 600 60 L 620 70 L 640 83 L 660 98 L 680 114 L 700 131 L 720 147 L 740 162 L 760 175 L 780 186 L 800 195 L 820 202 L 840 207 L 860 211 L 880 214 L 900 216 L 920 217 L 940 218" fill="none" stroke="url(#bellStroke)" stroke-width="3.5" stroke-linecap="round" filter="url(#curveGlow)" />
+
+          <!-- Axis Baseline -->
+          <line x1="40" y1="230" x2="960" y2="230" stroke="rgba(255,255,255,0.15)" stroke-width="1.5" />
+
+          <!-- Vertical Indicator Connectors -->
+          <line class="bell-indicator-line" x1="240" y1="175" x2="240" y2="235" stroke="#3b82f6" stroke-dasharray="3 3" stroke-width="1.5" />
+          <line class="bell-indicator-line" x1="500" y1="45" x2="500" y2="235" stroke="#00d4aa" stroke-dasharray="3 3" stroke-width="1.5" />
+          <line class="bell-indicator-line" x1="760" y1="175" x2="760" y2="235" stroke="#ffa502" stroke-dasharray="3 3" stroke-width="1.5" />
+
+          <!-- Luminous Traveling Particle -->
+          <circle r="4" fill="#ffffff" filter="url(#curveGlow)">
+            <animateMotion dur="4s" repeatCount="indefinite" path="M 60 218 L 80 217 L 100 216 L 120 214 L 140 211 L 160 207 L 180 202 L 200 195 L 220 186 L 240 175 L 260 162 L 280 147 L 300 131 L 320 114 L 340 98 L 360 83 L 380 70 L 400 60 L 420 53 L 440 49 L 460 47 L 480 46 L 500 45 L 520 46 L 540 47 L 560 49 L 580 53 L 600 60 L 620 70 L 640 83 L 660 98 L 680 114 L 700 131 L 720 147 L 740 162 L 760 175 L 780 186 L 800 195 L 820 202 L 840 207 L 860 211 L 880 214 L 900 216 L 920 217 L 940 218" />
+          </circle>
+
+          <!-- Node 1: Fast-Track -->
+          <circle cx="240" cy="175" r="12" fill="#3b82f6" class="bell-pulse-halo" />
+          <circle cx="240" cy="175" r="5" fill="none" stroke="#60a5fa" class="bell-radar-ring" />
+          <circle cx="240" cy="175" r="5" fill="#3b82f6" stroke="#ffffff" stroke-width="1.5" />
+
+          <!-- Node 2: Peak Apex (90 Days) -->
+          <circle cx="500" cy="45" r="16" fill="#00d4aa" class="bell-pulse-halo" />
+          <circle cx="500" cy="45" r="6" fill="none" stroke="#00d4aa" class="bell-radar-ring" />
+          <circle cx="500" cy="45" r="6" fill="none" stroke="#55efc4" class="bell-radar-ring-delayed" />
+          <circle cx="500" cy="45" r="7" fill="#00d4aa" stroke="#ffffff" stroke-width="2.5" />
+
+          <!-- Node 3: Deep Restructure -->
+          <circle cx="760" cy="175" r="12" fill="#ffa502" class="bell-pulse-halo" />
+          <circle cx="760" cy="175" r="5" fill="none" stroke="#fed330" class="bell-radar-ring" />
+          <circle cx="760" cy="175" r="5" fill="#ffa502" stroke="#ffffff" stroke-width="1.5" />
+
+          <!-- Timeline Labels Below Axis -->
+          <text x="240" y="254" text-anchor="middle" fill="#60a5fa" font-size="15" font-weight="700" font-family="'Montserrat', sans-serif">45 – 60 DAYS</text>
+          <text x="500" y="254" text-anchor="middle" fill="#00d4aa" font-size="16" font-weight="800" font-family="'Montserrat', sans-serif">90 DAYS (CORE PEAK)</text>
+          <text x="760" y="254" text-anchor="middle" fill="#ffa502" font-size="15" font-weight="700" font-family="'Montserrat', sans-serif">6 MONTHS</text>
+        </svg>
+      </div>
+
+      <!-- Minimal 3-Horizon Summary Pods -->
+      <div class="s10-pods-row">
+        <div class="s10-pod">
+          <div class="s10-pod-metric" style="color: #60a5fa;">~10%</div>
+          <div class="s10-pod-label">Fast-Track Clearance</div>
+          <div class="s10-pod-desc">Paid accounts &amp; bureau dispute updates</div>
+        </div>
+
+        <div class="s10-pod featured">
+          <div class="s10-pod-metric" style="color: #00d4aa;">~75%</div>
+          <div class="s10-pod-label" style="color: #00d4aa;">Primary Recovery Sweet Spot</div>
+          <div class="s10-pod-desc">90-day bank statement seasoning &amp; conduct repair</div>
+        </div>
+
+        <div class="s10-pod">
+          <div class="s10-pod-metric" style="color: #ffa502;">~15%</div>
+          <div class="s10-pod-label">Deep Restructuring</div>
+          <div class="s10-pod-desc">Aggressive debt pay-downs &amp; DTI rehabilitation</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SLIDE 12: Client Results - Thabile + Scores (Original Canva Slide) -->
+  <div class="slide" data-slide="12">
+    <img src="slides_img/slide_11.png" class="slide-img" alt="Client Results - Score Jumps (+78, +86) and Delivery">
+  </div>
+
+  <!-- SLIDE 13: Client Results - VW Delivery + 620 Score (Perfected Slide 12) -->
+  <div class="slide" data-slide="13">
+    <img src="slides_img/slide_12.png" class="slide-img" alt="Client Results - 620 Credit Scores & VW Delivery">
+  </div>
+
+  <!-- SLIDE 14: Client Results - Roderick Hennessy + Scores (Original Canva Slide) -->
+  <div class="slide" data-slide="14">
+    <img src="slides_img/slide_14.png" class="slide-img" alt="Client Results - Roderick Delivery with Hennessy & 694 Score">
+  </div>
+
+  <!-- SLIDE 15: EDITED — Performance-Based Partnership (Updated Pricing R6,000 / 5%) -->
+  <div class="slide" data-slide="15">
+    <div class="custom-slide">
+      <h1 class="underline-title" style="margin-bottom: 36px;">
+        PERFORMANCE-BASED PARTNERSHIP
+      </h1>
+
+      <div class="s14-grid">
+        <!-- Left Column: Pricing Structure -->
+        <div class="s14-col">
+          <h2>Pricing Structure:</h2>
+          <ul class="s14-list">
+            <li>
+              <strong>Vehicles Under R130,000:</strong><br>
+              <span class="s14-highlight" style="font-size: 20px; font-weight: 800;">R6,000 flat</span> handling fee per successfully recovered deal.
+            </li>
+            <li>
+              <strong>Vehicles R130,000 and Above:</strong><br>
+              <span class="s14-highlight" style="font-size: 20px; font-weight: 800;">5.0% of vehicle retail price</span> on successfully funded delivery.
+            </li>
+            <li>
+              <strong>Zero Retainers:</strong> No monthly subscriptions or hidden "platform fees".
+            </li>
+            <li>
+              <strong>Pure Contingency:</strong> We only earn when you successfully close and bank a deal from a CBF-recovered buyer.
+            </li>
+            <li>
+              <strong>Zero Risk Guarantee:</strong> If the customer does not take delivery of a car from your floor, you owe R0.
+            </li>
+          </ul>
+        </div>
+
+        <!-- Right Column: Dealership Benefits -->
+        <div class="s14-col">
+          <h2>Dealership Benefits:</h2>
+          <ul class="s14-list">
+            <li>
+              <strong>100% Risk-Free:</strong> No upfront capital expenditure (CAPEX) required. Risk-free entry into the system.
+            </li>
+            <li>
+              <strong>Exclusively Protected:</strong> Triple-lock commercial guarantee routing buyers strictly back to your showroom floor.
+            </li>
+            <li>
+              <strong>Recover "Lost" Revenue:</strong> Turn cold turn-downs and "failed-credit" files into bankable showroom deliveries.
+            </li>
+            <li>
+              <strong>Seamless Integration:</strong> Zero additional administrative burden for your F&I team — 30 seconds to refer, we handle the rest off-site.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 16: Thank You (Original Canva Slide) -->
+  <div class="slide" data-slide="16">
+    <img src="slides_img/slide_15.png" class="slide-img" alt="Thank You - Volve Media Present by Kea">
+  </div>
+
+</div>
+
+<!-- ── Navigation Bar ── -->
+<div class="nav-bar">
+  <button class="nav-btn" id="prevBtn" onclick="navigate(-1)">← Previous</button>
+  <div class="progress-wrap">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+  <div class="key-hint">Press <strong>[Space]</strong> or <strong>[→]</strong> &nbsp;|&nbsp; <strong>[F]</strong> for Fullscreen</div>
+  <div class="slide-indicator" id="slideIndicator">01 / 16</div>
+  <button class="nav-btn" id="nextBtn" onclick="navigate(1)">Next →</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const totalSlides = slides.length;
+  let currentSlide = 0;
+
+  function showSlide(index) {
+    slides.forEach((slide, i) => {
+      slide.classList.toggle('active', i === index);
+    });
+    const progressPct = ((index + 1) / totalSlides) * 100;
+    document.getElementById('progressBar').style.width = progressPct + '%';
+    const num = (index + 1).toString().padStart(2, '0');
+    document.getElementById('slideIndicator').textContent = `${num} / ${totalSlides}`;
+    try { history.replaceState(null, null, '#slide=' + (index + 1)); } catch (e) {}
+  }
+
+  function navigate(direction) {
+    currentSlide = Math.max(0, Math.min(totalSlides - 1, currentSlide + direction));
+    showSlide(currentSlide);
+  }
+
+  // Check initial hash
+  const hashMatch = window.location.hash.match(/slide=(\d+)/);
+  if (hashMatch) {
+    currentSlide = Math.max(0, Math.min(totalSlides - 1, parseInt(hashMatch[1]) - 1));
+  }
+  showSlide(currentSlide);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ' || e.key === 'PageDown') {
+      e.preventDefault();
+      navigate(1);
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key === 'PageUp' || e.key === 'Backspace') {
+      e.preventDefault();
+      navigate(-1);
+    } else if (e.key === 'f' || e.key === 'F') {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        document.exitFullscreen().catch(() => {});
+      }
+    }
+  });
+
+  // Touch swipe support for laptop touchscreens / tablets
+  let touchStartX = 0;
+  document.addEventListener('touchstart', (e) => {
+    touchStartX = e.touches[0].clientX;
+  }, { passive: true });
+
+  document.addEventListener('touchend', (e) => {
+    const touchEndX = e.changedTouches[0].clientX;
+    const diff = touchStartX - touchEndX;
+    if (Math.abs(diff) > 40) {
+      navigate(diff > 0 ? 1 : -1);
+    }
+  }, { passive: true });
+
+  showSlide(currentSlide);
+</script>
+
+</body>
+</html>

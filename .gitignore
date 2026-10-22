@@ -1,0 +1,5 @@
+# Local test & patch scratch scripts
+*.py
+*.pyc
+__pycache__/
+*.log
