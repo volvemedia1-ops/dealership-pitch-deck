@@ -3,17 +3,40 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Credit Builder Flow — Dealership Presentation V3.1</title>
+<title>Credit Builder Flow — Dealership Presentation V4.0</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23000'/%3E%3Ccircle cx='32' cy='32' r='18' fill='none' stroke='%2300d4aa' stroke-width='6'/%3E%3Ccircle cx='32' cy='32' r='6' fill='%2300d4aa'/%3E%3C/svg%3E">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap');
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+  :root {
+    --bg: #000000;
+    --surface: rgba(255, 255, 255, 0.03);
+    --surface-hover: rgba(255, 255, 255, 0.055);
+    --border: rgba(255, 255, 255, 0.11);
+    --emerald: #00d4aa;
+    --emerald-bg: rgba(0, 212, 170, 0.06);
+    --emerald-border: rgba(0, 212, 170, 0.35);
+    --red: #ff4757;
+    --red-bg: rgba(255, 71, 87, 0.05);
+    --red-border: rgba(255, 71, 87, 0.32);
+    --amber: #ffa502;
+    --amber-bg: rgba(255, 165, 2, 0.06);
+    --amber-border: rgba(255, 165, 2, 0.35);
+    --blue: #60a5fa;
+    --blue-bg: rgba(96, 165, 250, 0.06);
+    --blue-border: rgba(96, 165, 250, 0.35);
+    --text-main: #ffffff;
+    --text-body: #d4d4df;
+    --text-muted: #8e8ea2;
+  }
+
   html, body {
     width: 100%;
     height: 100%;
-    background-color: #000000;
-    color: #ffffff;
+    background-color: var(--bg);
+    color: var(--text-main);
     font-family: 'Montserrat', 'Inter', -apple-system, sans-serif;
     overflow: hidden;
     user-select: none;
@@ -33,300 +56,424 @@
 
   .slide {
     position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
+    z-index: 1;
+    transition: opacity 0.28s ease, visibility 0.28s ease;
     pointer-events: none;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
 
   .slide.active {
     opacity: 1;
     visibility: visible;
+    z-index: 2;
     pointer-events: auto;
   }
 
-  /* ── Image Slide Display (100% native Canva fidelity) ── */
+  /* ── Image Slide Display (Canva Native Fidelity) ── */
   .slide-img {
+    margin: auto;
     max-width: 100vw;
-    max-height: 100vh;
+    max-height: calc(100vh - 64px);
     width: auto;
     height: auto;
     object-fit: contain;
     box-shadow: 0 0 50px rgba(0,0,0,0.8);
   }
 
-  /* ── Custom Edited Slide Styling (Matches Canva Dark Aesthetic Exactly) ── */
+  /* ── Custom Slide Base (Matches Canva Dark Aesthetic) ── */
   .custom-slide {
-    width: 100vw;
-    height: 100vh;
-    max-width: 1920px;
-    max-height: 1080px;
-    aspect-ratio: 16 / 9;
-    padding: 60px 100px 90px;
+    width: 100%;
+    max-width: 1320px;
+    margin: auto;
+    padding: 36px 56px 84px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     background: #000000;
     position: relative;
-    box-sizing: border-box;
   }
 
-  .custom-slide h1 {
-    font-size: 46px;
-    font-weight: 800;
-    letter-spacing: -0.5px;
+  .slide-header {
     text-align: center;
-    line-height: 1.25;
-    margin-bottom: 24px;
-    color: #ffffff;
-    max-width: 1200px;
+    margin-bottom: 28px;
+    max-width: 1060px;
   }
 
-  .custom-slide .underline-title {
+  .slide-kicker {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 2.8px;
+    text-transform: uppercase;
+    color: var(--emerald);
+    margin-bottom: 10px;
+  }
+
+  .slide-kicker.red { color: var(--red); }
+  .slide-kicker.amber { color: var(--amber); }
+  .slide-kicker.blue { color: var(--blue); }
+
+  .slide-title {
+    font-size: clamp(28px, 3.2vw, 44px);
+    font-weight: 800;
+    letter-spacing: -0.6px;
+    line-height: 1.18;
+    color: #ffffff;
+    margin-bottom: 10px;
+  }
+
+  .slide-subtitle {
+    font-size: clamp(14px, 1.25vw, 17px);
+    font-family: 'Inter', sans-serif;
+    line-height: 1.5;
+    color: var(--text-muted);
+    max-width: 960px;
+    margin: 0 auto;
+    text-wrap: balance;
+  }
+
+  .underline-title {
     text-decoration: underline;
     text-underline-offset: 12px;
     text-decoration-thickness: 3px;
     text-decoration-color: #ffffff;
   }
 
-  /* ── Slide 6 Custom Layout ── */
+  /* ── Shared Cards & Grids ── */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 28px;
+    width: 100%;
+    max-width: 1180px;
+  }
+
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 22px;
+    width: 100%;
+    max-width: 1180px;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 26px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .card.emerald {
+    background: var(--emerald-bg);
+    border-color: var(--emerald-border);
+    box-shadow: 0 0 36px rgba(0, 212, 170, 0.06);
+  }
+
+  .card.red {
+    background: var(--red-bg);
+    border-color: var(--red-border);
+  }
+
+  .card.amber {
+    background: var(--amber-bg);
+    border-color: var(--amber-border);
+  }
+
+  .card.blue {
+    background: var(--blue-bg);
+    border-color: var(--blue-border);
+  }
+
+  .pill-tag {
+    display: inline-block;
+    width: fit-content;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.1px;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.05);
+    color: var(--text-body);
+  }
+
+  .pill-tag.emerald { color: var(--emerald); background: rgba(0,212,170,0.14); border-color: rgba(0,212,170,0.4); }
+  .pill-tag.red { color: var(--red); background: rgba(255,71,87,0.14); border-color: rgba(255,71,87,0.4); }
+  .pill-tag.amber { color: var(--amber); background: rgba(255,165,2,0.14); border-color: rgba(255,165,2,0.4); }
+  .pill-tag.blue { color: var(--blue); background: rgba(96,165,250,0.14); border-color: rgba(96,165,250,0.4); }
+
+  .callout-banner {
+    margin-top: 24px;
+    width: 100%;
+    max-width: 1180px;
+    padding: 18px 28px;
+    border-radius: 12px;
+    background: rgba(0, 212, 170, 0.08);
+    border: 1px solid rgba(0, 212, 170, 0.35);
+    text-align: center;
+    font-size: clamp(14.5px, 1.3vw, 18.5px);
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1.45;
+    text-wrap: balance;
+  }
+
+  .callout-banner strong {
+    color: var(--emerald);
+  }
+
+  .callout-banner.red {
+    background: rgba(255, 71, 87, 0.08);
+    border-color: rgba(255, 71, 87, 0.35);
+  }
+
+  .callout-banner.red strong {
+    color: var(--red);
+  }
+
+  /* ── Slide 2: Origin & 80%+ Mission (Canva Framed Style) ── */
+  .s2-frame {
+    width: 100%;
+    max-width: 1160px;
+    border: 1.5px solid rgba(255, 255, 255, 0.55);
+    border-radius: 16px;
+    padding: 36px 44px;
+    background: linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(0,0,0,0.95) 100%);
+    display: grid;
+    grid-template-columns: 1.25fr 0.9fr;
+    gap: 36px;
+    align-items: center;
+  }
+
+  .s2-story h2 {
+    font-size: clamp(28px, 3vw, 42px);
+    font-weight: 900;
+    letter-spacing: 0.5px;
+    margin-bottom: 18px;
+  }
+
+  .s2-story p {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--text-body);
+    margin-bottom: 14px;
+  }
+
+  .s2-quote {
+    padding: 14px 18px;
+    border-left: 3px solid var(--red);
+    background: rgba(255, 71, 87, 0.06);
+    border-radius: 0 10px 10px 0;
+    font-style: italic;
+    color: #ffffff;
+    font-size: 15.5px;
+    margin: 16px 0;
+  }
+
+  .s2-mission-box {
+    border: 1px solid var(--emerald-border);
+    background: var(--emerald-bg);
+    border-radius: 16px;
+    padding: 32px 28px;
+    text-align: center;
+    box-shadow: 0 0 40px rgba(0, 212, 170, 0.1);
+  }
+
+  .s2-mission-stat {
+    font-size: clamp(54px, 5vw, 72px);
+    font-weight: 900;
+    color: var(--emerald);
+    line-height: 1;
+    letter-spacing: -2px;
+    margin-bottom: 10px;
+  }
+
+  .s2-mission-label {
+    font-size: 17px;
+    font-weight: 800;
+    color: #ffffff;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+  }
+
+  .s2-mission-desc {
+    font-family: 'Inter', sans-serif;
+    font-size: 14.5px;
+    line-height: 1.55;
+    color: var(--text-body);
+  }
+
+  /* ── Slide 6: 50% Rejection Reality ── */
   .s6-graphic-wrap {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-top: 30px;
-    gap: 24px;
-  }
-
-  .s6-icon-box {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 40px;
+    margin-top: 12px;
+    gap: 20px;
   }
 
   .s6-badge-row {
     display: flex;
-    gap: 16px;
-    margin-top: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
   }
 
   .s6-badge {
     background: #111116;
     border: 1px solid #2a2a38;
-    color: #a0a0b8;
-    font-size: 14px;
+    color: #b4b4c8;
+    font-size: 13.5px;
     font-weight: 600;
     padding: 8px 18px;
     border-radius: 24px;
   }
 
   .s6-callout {
-    font-size: 26px;
+    font-size: clamp(22px, 2.2vw, 28px);
     font-weight: 800;
-    color: #ff4757;
+    color: var(--red);
     text-align: center;
-    margin-top: 36px;
-    line-height: 1.4;
+    margin-top: 24px;
+    line-height: 1.35;
   }
 
   .s6-subnote {
-    font-size: 16px;
-    color: #8888a0;
+    font-family: 'Inter', sans-serif;
+    font-size: 15.5px;
+    color: var(--text-muted);
     text-align: center;
-    margin-top: 8px;
+    margin-top: 10px;
+    line-height: 1.55;
+    max-width: 780px;
   }
 
-  /* ── Slide 7 Custom Layout (2 Personas Architecture) ── */
-  .s7-wrap {
-    width: 100%;
-    max-width: 1160px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
-  }
-
-  .s7-header {
-    text-align: center;
-    margin-bottom: 32px;
-  }
-
-  .s7-kicker {
-    font-size: 13px;
+  /* ── Slide 7: Math & Risk ── */
+  .s7m-card-title {
+    font-size: 20px;
     font-weight: 800;
-    letter-spacing: 3px;
-    color: #00d4aa;
-    text-transform: uppercase;
-    display: block;
-    margin-bottom: 10px;
-  }
-
-  .s7-title {
-    font-size: 44px;
-    font-weight: 800;
-    letter-spacing: -0.5px;
     color: #ffffff;
-    margin: 0 0 12px 0;
   }
 
-  .s7-subtitle {
-    font-size: 16px;
-    color: #88889a;
-    max-width: 860px;
-    margin: 0 auto;
-    line-height: 1.5;
+  .s7m-card-copy {
+    font-family: 'Inter', sans-serif;
+    font-size: 15.5px;
+    line-height: 1.6;
+    color: var(--text-body);
   }
 
-  .s7-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 32px;
-    width: 100%;
-    max-width: 1160px;
+  .s7m-stat {
+    font-size: 36px;
+    font-weight: 900;
+    line-height: 1.1;
   }
 
-  .s7-card {
-    background: rgba(255, 255, 255, 0.02);
-    border-radius: 14px;
-    padding: 28px 30px;
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-  }
-
-  .s7-card.recoverable {
-    border: 1px solid rgba(0, 212, 170, 0.35);
-    background: rgba(0, 212, 170, 0.03);
-    box-shadow: 0 0 35px rgba(0, 212, 170, 0.06);
-  }
-
-  .s7-card.unrecoverable {
-    border: 1px solid rgba(255, 71, 87, 0.3);
-    background: rgba(255, 71, 87, 0.02);
-  }
-
-  .s7-card-head {
+  /* ── Slide 8: Two Buckets ── */
+  .bucket-head {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 12px;
     padding-bottom: 14px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   }
 
-  .s7-badge-tag {
-    font-size: 12px;
-    font-weight: 800;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    padding: 5px 12px;
-    border-radius: 20px;
-  }
-
-  .s7-badge-tag.rec {
-    background: rgba(0, 212, 170, 0.15);
-    color: #00d4aa;
-    border: 1px solid rgba(0, 212, 170, 0.4);
-  }
-
-  .s7-badge-tag.unrec {
-    background: rgba(255, 71, 87, 0.15);
-    color: #ff4757;
-    border: 1px solid rgba(255, 71, 87, 0.4);
-  }
-
-  .s7-card-action {
+  .bucket-action {
     font-size: 13px;
     font-weight: 600;
-    color: #a0a0b0;
+    color: var(--text-muted);
   }
 
-  .s7-list {
+  .check-list {
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 14px;
   }
 
-  .s7-list li {
-    font-size: 15.5px;
+  .check-list li {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
     line-height: 1.55;
-    color: #d0d0d8;
+    color: var(--text-body);
     position: relative;
     padding-left: 26px;
   }
 
-  .s7-list li::before {
+  .check-list li::before {
     position: absolute;
     left: 0;
-    top: 0;
+    top: -1px;
     font-weight: 800;
+    font-size: 16px;
+  }
+
+  .check-list.emerald li::before { content: "✓"; color: var(--emerald); }
+  .check-list.red li::before { content: "✕"; color: var(--red); }
+  .check-list.dot li::before { content: "•"; color: #ffffff; font-size: 22px; top: -4px; }
+  .check-list li strong { color: #ffffff; font-weight: 700; }
+
+  /* ── Slide 9 & 10: 3 Bank Questions & CBF Fix ── */
+  .q-num {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
     font-size: 17px;
   }
 
-  .s7-card.recoverable .s7-list li::before {
-    content: "✓";
-    color: #00d4aa;
-  }
+  .q-num.blue { background: rgba(96,165,250,0.16); color: var(--blue); border: 1px solid var(--blue-border); }
+  .q-num.amber { background: rgba(255,165,2,0.16); color: var(--amber); border: 1px solid var(--amber-border); }
+  .q-num.emerald { background: rgba(0,212,170,0.16); color: var(--emerald); border: 1px solid var(--emerald-border); }
 
-  .s7-card.unrecoverable .s7-list li::before {
-    content: "✕";
-    color: #ff4757;
-  }
-
-  .s7-list li strong {
-    color: #ffffff;
-    font-weight: 700;
-  }
-
-  /* ── Slide 10 Custom Table ── */
-  .s10-table {
-    width: 100%;
-    max-width: 1200px;
-    border-collapse: collapse;
-    background: #000000;
-    margin-top: 10px;
-    border: 1px solid #333333;
-  }
-
-  .s10-table th, .s10-table td {
-    padding: 16px 20px;
-    text-align: left;
-    border: 1px solid #333333;
-    font-size: 16px;
-    line-height: 1.4;
-  }
-
-  .s10-table th {
-    background: #111111;
-    font-weight: 700;
-    color: #ffffff;
-    font-size: 15px;
-  }
-
-  .s10-table td {
-    color: #e0e0e0;
-  }
-
-  .s10-table td.num {
-    text-align: center;
-    font-weight: 700;
-  }
-
-  .s10-table td.money {
+  .q-title {
+    font-size: 20px;
     font-weight: 800;
-    color: #00d4aa;
+    color: #ffffff;
   }
 
-  /* ── Bell Curve Animations & Styling (Slide 10) ── */
+  .q-quote {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #f0f0f6;
+    font-style: italic;
+  }
+
+  .q-fail {
+    margin-top: auto;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    font-family: 'Inter', sans-serif;
+    font-size: 13.5px;
+    color: var(--text-muted);
+    line-height: 1.45;
+  }
+
+  .q-fail strong { color: var(--red); }
+  .q-fix strong { color: var(--emerald); }
+
+  /* ── Slide 11: Bell Curve & 3 Case Studies ── */
   @keyframes drawBellStroke {
     0% { stroke-dashoffset: 1400; }
     100% { stroke-dashoffset: 0; }
@@ -340,7 +487,7 @@
   @keyframes radarRipple {
     0% { r: 6; opacity: 0.9; stroke-width: 2.5; }
     50% { opacity: 0.5; }
-    100% { r: 26; opacity: 0; stroke-width: 0.5; }
+    100% { r: 24; opacity: 0; stroke-width: 0.5; }
   }
 
   @keyframes nodeHaloPulse {
@@ -353,182 +500,245 @@
     100% { stroke-dashoffset: 0; opacity: 0.6; }
   }
 
-  .bell-curve-stroke {
-    stroke-dasharray: 1400;
-    stroke-dashoffset: 0;
-    animation: drawBellStroke 2.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  }
+  .bell-curve-stroke { stroke-dasharray: 1400; stroke-dashoffset: 0; animation: drawBellStroke 2.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+  .bell-curve-fill { animation: fadeInCurveFill 1.6s ease-out 0.4s forwards; opacity: 0; transform-origin: bottom center; }
+  .bell-indicator-line { stroke-dasharray: 260; stroke-dashoffset: 0; animation: dropDashedLine 1s ease-out 1s backwards; }
+  .bell-radar-ring { animation: radarRipple 2.4s cubic-bezier(0.1, 0.8, 0.2, 1) infinite; }
+  .bell-radar-ring-delayed { animation: radarRipple 2.4s cubic-bezier(0.1, 0.8, 0.2, 1) infinite 1.2s; }
+  .bell-pulse-halo { animation: nodeHaloPulse 2.5s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
 
-  .bell-curve-fill {
-    animation: fadeInCurveFill 1.6s ease-out 0.4s forwards;
-    opacity: 0;
-    transform-origin: bottom center;
-  }
-
-  .bell-indicator-line {
-    stroke-dasharray: 260;
-    stroke-dashoffset: 0;
-    animation: dropDashedLine 1s ease-out 1s backwards;
-  }
-
-  .bell-radar-ring {
-    animation: radarRipple 2.4s cubic-bezier(0.1, 0.8, 0.2, 1) infinite;
-  }
-
-  .bell-radar-ring-delayed {
-    animation: radarRipple 2.4s cubic-bezier(0.1, 0.8, 0.2, 1) infinite 1.2s;
-  }
-
-  .bell-pulse-halo {
-    animation: nodeHaloPulse 2.5s ease-in-out infinite;
-    transform-box: fill-box;
-    transform-origin: center;
-  }
-
-  /* ── Slide 10 Minimal Bell Curve Layout ── */
-  .s10-minimal-wrap {
-    width: 100%;
-    max-width: 1100px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 10px 40px;
-    box-sizing: border-box;
-  }
-
-  .s10-header {
-    text-align: center;
-    margin-bottom: 24px;
-  }
-
-  .s10-kicker {
-    font-size: 13px;
-    font-weight: 800;
-    letter-spacing: 2.5px;
-    color: #00d4aa;
-    text-transform: uppercase;
-    display: block;
-    margin-bottom: 8px;
-  }
-
-  .s10-title {
-    font-size: 40px;
-    font-weight: 800;
-    letter-spacing: -0.5px;
-    color: #ffffff;
-    margin: 0;
-  }
-
-  .s10-curve-box {
+  .s11-curve-box {
     width: 100%;
     max-width: 980px;
-    margin-bottom: 24px;
+    margin-bottom: 14px;
   }
 
-  .s10-svg {
+  .s11-svg {
     width: 100%;
     height: auto;
+    max-height: 200px;
     overflow: visible;
   }
 
-  .s10-pods-row {
+  .s11-pods-row {
     display: grid;
-    grid-template-columns: 1fr 1.25fr 1fr;
-    gap: 20px;
+    grid-template-columns: 1fr 1.15fr 1fr;
+    gap: 18px;
     width: 100%;
-    max-width: 980px;
+    max-width: 1180px;
   }
 
-  .s10-pod {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.07);
-    border-radius: 12px;
-    padding: 18px 20px;
-    text-align: center;
+  .s11-pod {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 13px;
+    padding: 16px 18px;
     display: flex;
     flex-direction: column;
+    gap: 8px;
+  }
+
+  .s11-pod.featured {
+    background: rgba(0, 212, 170, 0.05);
+    border-color: rgba(0, 212, 170, 0.42);
+    box-shadow: 0 0 28px rgba(0, 212, 170, 0.09);
+  }
+
+  .s11-pod-top {
+    display: flex;
     align-items: center;
-    gap: 4px;
+    justify-content: space-between;
+    gap: 8px;
   }
 
-  .s10-pod.featured {
-    background: rgba(0, 212, 170, 0.04);
-    border: 1px solid rgba(0, 212, 170, 0.35);
-    box-shadow: 0 0 25px rgba(0, 212, 170, 0.08);
-  }
-
-  .s10-pod-metric {
-    font-size: 26px;
+  .s11-cat-label {
+    font-size: 10.5px;
     font-weight: 800;
-    letter-spacing: -0.5px;
-    line-height: 1.1;
+    letter-spacing: 1px;
+    text-transform: uppercase;
   }
 
-  .s10-pod-label {
-    font-size: 14px;
-    font-weight: 700;
+  .s11-pct {
+    font-size: 20px;
+    font-weight: 900;
+  }
+
+  .s11-case-name {
+    font-size: 16px;
+    font-weight: 800;
     color: #ffffff;
-    margin-top: 2px;
   }
 
-  .s10-pod-desc {
+  .s11-case-detail {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    line-height: 1.48;
+    color: var(--text-body);
+  }
+
+  .s11-case-result {
+    margin-top: auto;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    font-size: 12.5px;
+    font-weight: 700;
+  }
+
+  /* ── Slide 14: Zero-Lift Flow ── */
+  .flow-step-num {
     font-size: 12px;
-    color: #88889a;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  .flow-step-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1.3;
+  }
+
+  .flow-step-body {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--text-body);
+  }
+
+  /* ── Slide 16: Commercials & Interactive Destination Math ── */
+  .s16-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    width: 100%;
+    max-width: 1180px;
+    align-items: stretch;
+  }
+
+  .s16-col-title {
+    font-size: 22px;
+    font-weight: 800;
+    text-decoration: underline;
+    text-underline-offset: 8px;
+    margin-bottom: 18px;
+    color: #ffffff;
+  }
+
+  .math-inputs {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .math-field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 0;
+  }
+
+  .math-field label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.7px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .math-field input {
+    width: 100%;
+    min-width: 0;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 8px;
+    padding: 8px 12px;
+    color: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .math-field input:focus {
+    border-color: var(--emerald);
+  }
+
+  .math-results {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 6px;
+  }
+
+  .math-kpi {
+    border-radius: 10px;
+    padding: 14px 16px;
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.025);
+  }
+
+  .math-kpi.bleed {
+    border-color: var(--red-border);
+    background: var(--red-bg);
+  }
+
+  .math-kpi.gain {
+    border-color: var(--emerald-border);
+    background: var(--emerald-bg);
+  }
+
+  .math-kpi-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+
+  .math-kpi-val {
+    font-size: 23px;
+    font-weight: 900;
+    line-height: 1.2;
+  }
+
+  .math-kpi-sub {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    color: var(--text-body);
+    margin-top: 4px;
+  }
+
+  /* ── Slide 17: 3 Decisions ── */
+  .d-card-head {
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  .d-card-title {
+    font-size: 21px;
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1.25;
+  }
+
+  .d-outcome {
+    margin-top: auto;
+    padding: 12px 14px;
+    border-radius: 10px;
+    font-size: 13.5px;
+    font-weight: 700;
     line-height: 1.4;
   }
 
-  /* ── Slide 14 Custom Layout (Performance Partnership) ── */
-  .s14-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 80px;
-    width: 100%;
-    max-width: 1200px;
-    margin-top: 20px;
-  }
-
-  .s14-col h2 {
-    font-size: 26px;
-    font-weight: 700;
-    text-decoration: underline;
-    text-underline-offset: 8px;
-    margin-bottom: 28px;
-    color: #ffffff;
-  }
-
-  .s14-list {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 22px;
-  }
-
-  .s14-list li {
-    font-size: 17px;
-    line-height: 1.55;
-    color: #d0d0d8;
-    position: relative;
-    padding-left: 28px;
-  }
-
-  .s14-list li::before {
-    content: "•";
-    position: absolute;
-    left: 0;
-    top: -2px;
-    font-size: 26px;
-    color: #ffffff;
-  }
-
-  .s14-list li strong {
-    color: #ffffff;
-    font-weight: 700;
-  }
-
-  .s14-highlight {
-    color: #00d4aa !important;
-  }
+  .d-outcome.red { background: rgba(255,71,87,0.12); color: #ff8a95; }
+  .d-outcome.neutral { background: rgba(255,255,255,0.06); color: #d4d4df; }
+  .d-outcome.emerald { background: rgba(0,212,170,0.14); color: var(--emerald); }
 
   /* ── Floating Navigation UI ── */
   .nav-bar {
@@ -540,8 +750,10 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 40px;
-    background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.9) 70%);
+    padding: 0 36px;
+    background: rgba(0, 0, 0, 0.92);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(8px);
     z-index: 1000;
   }
 
@@ -549,7 +761,7 @@
     background: rgba(255, 255, 255, 0.08);
     border: 1px solid rgba(255, 255, 255, 0.2);
     color: #ffffff;
-    padding: 8px 20px;
+    padding: 8px 18px;
     border-radius: 8px;
     font-size: 13px;
     font-weight: 600;
@@ -559,41 +771,146 @@
   }
 
   .nav-btn:hover {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: #00d4aa;
-    color: #00d4aa;
+    background: rgba(255, 255, 255, 0.18);
+    border-color: var(--emerald);
+    color: var(--emerald);
   }
 
   .progress-wrap {
     flex: 1;
-    max-width: 400px;
+    max-width: 380px;
     height: 4px;
     background: #222222;
     border-radius: 4px;
-    margin: 0 24px;
+    margin: 0 20px;
     overflow: hidden;
   }
 
   .progress-bar {
     height: 100%;
-    background: #00d4aa;
+    background: var(--emerald);
     border-radius: 4px;
     transition: width 0.3s ease;
   }
 
   .slide-indicator {
     font-size: 13px;
-    font-weight: 600;
-    color: #888888;
+    font-weight: 700;
+    color: #b4b4c4;
     letter-spacing: 1px;
-    min-width: 70px;
-    text-align: right;
+    min-width: 82px;
+    text-align: center;
+    cursor: pointer;
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.04);
+    transition: all 0.2s;
+  }
+
+  .slide-indicator:hover {
+    border-color: var(--emerald);
+    color: var(--emerald);
   }
 
   .key-hint {
     font-size: 11px;
-    color: #555555;
-    letter-spacing: 0.5px;
+    color: #6c6c80;
+    letter-spacing: 0.4px;
+  }
+
+  /* ── Quick Slide Index Overlay ── */
+  .index-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.92);
+    backdrop-filter: blur(12px);
+    z-index: 2000;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 36px 28px 80px;
+    overflow-y: auto;
+  }
+
+  .index-overlay.open {
+    display: flex;
+  }
+
+  .index-header {
+    width: 100%;
+    max-width: 1120px;
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+
+  .index-header h2 {
+    font-size: 22px;
+    font-weight: 800;
+  }
+
+  .index-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 12px;
+    width: 100%;
+    max-width: 1120px;
+    margin-bottom: auto;
+  }
+
+  .index-item {
+    text-align: left;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px;
+    padding: 12px 14px;
+    color: #ffffff;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s;
+  }
+
+  .index-item:hover, .index-item.current {
+    border-color: var(--emerald);
+    background: rgba(0,212,170,0.08);
+  }
+
+  .index-item-num {
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--emerald);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .index-item-title {
+    font-size: 13.5px;
+    font-weight: 700;
+    line-height: 1.35;
+  }
+
+  @media (max-width: 960px) {
+    .custom-slide { padding: 24px 22px 84px; }
+    .s2-frame, .grid-2, .grid-3, .s11-pods-row, .s16-grid {
+      grid-template-columns: 1fr;
+    }
+    .key-hint { display: none; }
+    .nav-bar { padding: 0 16px; }
+  }
+
+  @media (max-width: 560px) {
+    .math-inputs, .math-results {
+      grid-template-columns: 1fr;
+    }
+    .nav-btn {
+      padding: 8px 12px;
+      font-size: 12px;
+    }
   }
 </style>
 </head>
@@ -602,51 +919,76 @@
 <div class="deck-container" id="deck">
 
   <!-- SLIDE 1: Cover (Original Canva Slide) -->
-  <div class="slide active" data-slide="1">
+  <div class="slide" data-slide="1" data-title="Cover — Credit Builder Flow">
     <img src="slides_img/slide_1.png" class="slide-img" alt="Credit Builder Flow Presentation Cover">
   </div>
 
-  <!-- SLIDE 2: Introduction Story (Original Canva Slide) -->
-  <div class="slide" data-slide="2">
-    <img src="slides_img/slide_2.png" class="slide-img" alt="Volve Media Introduction">
+  <!-- SLIDE 2: Origin & 80%+ Approval Mission (Script Block 8) -->
+  <div class="slide" data-slide="2" data-title="Origin & 80%+ Approval Mission">
+    <div class="custom-slide">
+      <div class="s2-frame">
+        <div class="s2-story">
+          <span class="slide-kicker">WHY WE BUILT THIS</span>
+          <h2>INTRODUCTION</h2>
+          <p>
+            We originally started as <strong>Volve Media</strong> — an automotive advertising agency generating thousands of buyer leads for dealerships across South Africa.
+          </p>
+          <p>
+            The ads worked and showrooms were full, yet month after month Dealer Principals told us the exact same thing:
+          </p>
+          <div class="s2-quote">
+            "Guys, the leads are here — but over half of them are getting declined at the bank."
+          </div>
+          <p style="margin-bottom: 0;">
+            We refused to be just another agency dumping raw traffic onto an F&amp;I desk. We built <strong>Credit Builder Flow (CBF)</strong> to solve the credit bottleneck directly — turning declined showroom shoppers into bank-approved deliveries without adding work to your floor.
+          </p>
+        </div>
+
+        <div class="s2-mission-box">
+          <div class="s2-mission-stat">80%+</div>
+          <div class="s2-mission-label">Bank Finance Approval Rate</div>
+          <p class="s2-mission-desc">
+            The only automotive agency and recovery engine in South Africa engineered to clear bank underwriting hurdles and deliver an <strong>80%+ finance approval rate</strong> on the buyers we bring to your showroom.
+          </p>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <!-- SLIDE 3: Client Results - Dashboard (Original Canva Slide) -->
-  <div class="slide" data-slide="3">
+  <!-- SLIDE 3: Client Results - Ad Campaigns (Original Canva Slide) -->
+  <div class="slide" data-slide="3" data-title="Client Results — Lead Generation">
     <img src="slides_img/slide_3.png" class="slide-img" alt="Client Results - Ad Campaigns & Lead Costs">
   </div>
 
-  <!-- SLIDE 4: Client Results - Real Deliveries 1 (Original Canva Slide) -->
-  <div class="slide" data-slide="4">
-    <img src="slides_img/slide_4.png" class="slide-img" alt="Client Results - Vehicle Deliveries with Congratulations Ribbon">
+  <!-- SLIDE 4: Client Results - Royal Cars Deliveries (Original Canva Slide) -->
+  <div class="slide" data-slide="4" data-title="Client Results — Showroom Deliveries">
+    <img src="slides_img/slide_4.png" class="slide-img" alt="Client Results - Vehicle Deliveries">
   </div>
 
-  <!-- SLIDE 5: Client Results - Real Deliveries 2 (Original Canva Slide) -->
-  <div class="slide" data-slide="5">
+  <!-- SLIDE 5: Client Results - VW Handovers (Original Canva Slide) -->
+  <div class="slide" data-slide="5" data-title="Client Results — VW Handovers">
     <img src="slides_img/slide_5.png" class="slide-img" alt="Client Results - Volkswagen Dealership Handovers">
   </div>
 
-  <!-- SLIDE 6: EDITED — Rejection Reality (Universal to All Dealership Turn-Downs) -->
-  <div class="slide" data-slide="6">
+  <!-- SLIDE 6: The 50% Fallout Bleed -->
+  <div class="slide" data-slide="6" data-title="The 50% Fallout Bleed">
     <div class="custom-slide">
-      <h1 style="max-width: 1100px;">
-        Over 55% of Dealership Finance Applications Are Getting Rejected
-      </h1>
-      
+      <div class="slide-header" style="margin-bottom: 14px;">
+        <span class="slide-kicker red">THE INDUSTRY BOTTLENECK</span>
+        <h1 class="slide-title">
+          Over 50% of Dealership Finance Applications Are Getting Rejected
+        </h1>
+      </div>
+
       <div class="s6-graphic-wrap">
-        <!-- SVG Graphic matching the original stick-figure dealer desk style cleanly without watermarks -->
-        <svg width="420" height="200" viewBox="0 0 500 240" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- Table -->
+        <svg width="380" height="175" viewBox="0 0 500 240" fill="none" xmlns="http://www.w3.org/2000/svg">
           <rect x="200" y="140" width="160" height="16" rx="4" fill="#FFFFFF"/>
           <rect x="270" y="156" width="20" height="70" rx="3" fill="#FFFFFF"/>
-          <!-- F&I Manager / Underwriter on right -->
           <circle cx="390" cy="80" r="24" fill="#FFFFFF"/>
           <path d="M390 110 L390 170 L340 170" stroke="#FFFFFF" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
           <path d="M390 120 L310 95" stroke="#FFFFFF" stroke-width="14" stroke-linecap="round"/>
-          <!-- Chair right -->
           <rect x="360" y="140" width="14" height="60" rx="2" fill="#888888"/>
           <rect x="340" y="190" width="50" height="10" rx="2" fill="#888888"/>
-          <!-- Rejected Customer on left walking away disappointed -->
           <circle cx="110" cy="95" r="22" fill="#FFFFFF"/>
           <path d="M110 122 L110 180 L85 230" stroke="#FFFFFF" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
           <path d="M110 180 L135 230" stroke="#FFFFFF" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
@@ -665,96 +1007,246 @@
         "You cannot advertise your way out of a credit problem."
       </div>
       <div class="s6-subnote">
-        More showroom traffic into a 55% decline bottleneck just wastes marketing budget.<br>
-        The real gross profit is unlocked by recovering the buyers you already paid to acquire.
+        Pouring more marketing budget into a 50% Fallout Bleed just burns cash.<br>
+        The fastest gross profit sits inside the turned-down buyers you already paid to bring through the door.
       </div>
     </div>
   </div>
 
-  <!-- SLIDE 7: The Two Lead Personas (CBF Scope vs Unrecoverable) -->
-  <div class="slide" data-slide="7">
-    <div class="custom-slide" style="padding: 40px 80px 80px;">
-      <div class="s7-wrap">
-        
-        <div class="s7-header">
-          <span class="s7-kicker">TRIAGE ARCHITECTURE</span>
-          <h1 class="s7-title">Who We Rescue vs. Who We Decline</h1>
-          <p class="s7-subtitle">
-            Filtering out unserviceable files immediately to protect your F&amp;I's time, conditioning only buyers with real delivery upside.
+  <!-- SLIDE 7: Financing Is Math & Risk, Not Magic (Script Block 9) -->
+  <div class="slide" data-slide="7" data-title="Financing Is Math & Risk">
+    <div class="custom-slide">
+      <div class="slide-header">
+        <span class="slide-kicker">THE CORE PHILOSOPHY</span>
+        <h1 class="slide-title">Vehicle Financing Is Math &amp; Risk — Not Magic</h1>
+        <p class="slide-subtitle">
+          Bank underwriting isn't a mysterious secret locked inside banking halls. Every automated decline comes down to measurable math and behavioral risk rules.
+        </p>
+      </div>
+
+      <div class="grid-3">
+        <div class="card">
+          <span class="pill-tag">BANK INCENTIVE</span>
+          <div class="s7m-stat" style="color: var(--emerald);">R0 Profit</div>
+          <div class="s7m-card-title">Banks Want to Approve Cars</div>
+          <p class="s7m-card-copy">
+            Lenders earn zero interest when they decline your customer. Banks actively want more funded deals — their scorecards only reject applicants showing behavioral signs of default.
           </p>
         </div>
 
-        <div class="s7-grid">
-          <!-- Persona 1: Recoverable (CBF Scope) -->
-          <div class="s7-card recoverable">
-            <div class="s7-card-head">
-              <span class="s7-badge-tag rec">RECOVERABLE (CBF SCOPE)</span>
-              <span class="s7-card-action">Conditioned for Showroom Delivery</span>
-            </div>
-            <ul class="s7-list">
-              <li>
-                <strong>Verifiable Income &amp; Fit:</strong> Confirmed real earnings that mathematically support the vehicle installment tier.
-              </li>
-              <li>
-                <strong>Remediable Bureau Scars:</strong> 90-day bank conduct tripwires, debit reversals, or outdated bureau listings.
-              </li>
-              <li>
-                <strong>Structured 45-Day to 6-Month Horizons:</strong> Committed buyer progressing from fast-track bureau clearance up to 6-month deep restructuring.
-              </li>
-            </ul>
-          </div>
-
-          <!-- Persona 2: Unrecoverable (Filtered Out) -->
-          <div class="s7-card unrecoverable">
-            <div class="s7-card-head">
-              <span class="s7-badge-tag unrec">UNRECOVERABLE (FILTERED OUT)</span>
-              <span class="s7-card-action">Declined at Triage — Zero Time Wasted</span>
-            </div>
-            <ul class="s7-list">
-              <li>
-                <strong>Structural Affordability Deficit:</strong> Net disposable income mathematically cannot service the installment.
-              </li>
-              <li>
-                <strong>Active Statutory Debt Review:</strong> Formal Section 86 order legally blocking any new vehicle finance agreements.
-              </li>
-              <li>
-                <strong>Unsettled Civil Judgments:</strong> Open court judgments or sequestrations with zero capital or ability to settle.
-              </li>
-            </ul>
-          </div>
+        <div class="card emerald">
+          <span class="pill-tag emerald">EXACT SCIENCE</span>
+          <div class="s7m-stat" style="color: #ffffff;">3 Factors</div>
+          <div class="s7m-card-title">Predictable Scorecard Triggers</div>
+          <p class="s7m-card-copy">
+            We narrowed down the exact variables Signio and major SA lenders test before signing off finance — turning "mystery declines" into a repeatable engineering checklist.
+          </p>
         </div>
 
+        <div class="card">
+          <span class="pill-tag blue">DEALERSHIP EDGE</span>
+          <div class="s7m-stat" style="color: var(--blue);">Reversible</div>
+          <div class="s7m-card-title">Math Problems Can Be Fixed</div>
+          <p class="s7m-card-copy">
+            When a buyer has real income and genuine purchase intent, fixing the specific mathematical and conduct tripwires restores them to prime-grade approval readiness.
+          </p>
+        </div>
+      </div>
+
+      <div class="callout-banner">
+        Declined showroom leads aren't dead buyers — <strong>most simply failed a solvable math and risk check.</strong>
       </div>
     </div>
   </div>
 
-  <!-- SLIDE 8: Problem Statement (Original Canva Slide) -->
-  <div class="slide" data-slide="8">
-    <img src="slides_img/slide_7.png" class="slide-img" alt="Problem Statement - NCA Affordability, Historical Credit, Financial Behavior">
-  </div>
-
-  <!-- SLIDE 9: Our Innovative Solutions (Original Canva Slide) -->
-  <div class="slide" data-slide="9">
-    <img src="slides_img/slide_8.png" class="slide-img" alt="Our Innovative Solutions - NCA Restructuring, Trust Restoration, Behavior Audit">
-  </div>
-
-  <!-- SLIDE 10: AutoTrader 1-Star Review Proof (Original Canva Slide) -->
-  <div class="slide" data-slide="10">
-    <img src="slides_img/slide_9.png" class="slide-img" alt="AutoTrader Customer 1-Star Review: Declined Without Explanation">
-  </div>
-
-  <!-- SLIDE 11: The Lead Recovery Bell Curve (Minimal & Precise) -->
-  <div class="slide" data-slide="11">
-    <div class="s10-minimal-wrap">
-      
-      <div class="s10-header">
-        <span class="s10-kicker">RECOVERY HORIZONS</span>
-        <h1 class="s10-title">The Lead Recovery Bell Curve</h1>
+  <!-- SLIDE 8: The Two Buckets (Script Block 10) -->
+  <div class="slide" data-slide="8" data-title="The Two Buckets — Triage Architecture">
+    <div class="custom-slide">
+      <div class="slide-header">
+        <span class="slide-kicker">THE TWO BUCKETS · TRIAGE ARCHITECTURE</span>
+        <h1 class="slide-title">Who We Rescue vs. Who We Decline</h1>
+        <p class="slide-subtitle">
+          Not every declined buyer can be saved. The first thing our underwriting desk does is split every file into two strict buckets — protecting your floor's time.
+        </p>
       </div>
 
-      <!-- High-Impact Animated SVG Bell Curve -->
-      <div class="s10-curve-box">
-        <svg viewBox="0 0 1000 270" class="s10-svg" xmlns="http://www.w3.org/2000/svg">
+      <div class="grid-2">
+        <!-- Bucket 1: Unrecoverable -->
+        <div class="card red">
+          <div class="bucket-head">
+            <span class="pill-tag red">BUCKET 1 · TRULY UNRECOVERABLE</span>
+            <span class="bucket-action">Filtered Out Immediately</span>
+          </div>
+          <ul class="check-list red">
+            <li>
+              <strong>Formal Debt Review (Section 86):</strong> Active statutory debt counselling legally bars any bank from granting new vehicle finance.
+            </li>
+            <li>
+              <strong>Active Administration Orders:</strong> Court-ordered administration locks the consumer out of new credit agreements.
+            </li>
+            <li>
+              <strong>Active Court Judgments:</strong> Open civil judgments with zero capital or capacity to settle.
+            </li>
+            <li>
+              <strong>Zero Verifiable Income:</strong> Without stable, traceable earnings, there is no legal mechanism to put them in a car today.
+            </li>
+          </ul>
+          <div class="q-fail" style="border-color: rgba(255,71,87,0.2);">
+            <strong>Hard Boundary:</strong> We do not touch Bucket 1, and we never waste your F&amp;I desk's time pretending we can.
+          </div>
+        </div>
+
+        <!-- Bucket 2: Recoverable -->
+        <div class="card emerald">
+          <div class="bucket-head">
+            <span class="pill-tag emerald">BUCKET 2 · RECOVERABLE PIPELINE</span>
+            <span class="bucket-action">70%–80% of Turn-Downs</span>
+          </div>
+          <ul class="check-list emerald">
+            <li>
+              <strong>Real, Employed Buyers:</strong> Confirmed, stable salaries and traceable bank deposits that support a vehicle tier.
+            </li>
+            <li>
+              <strong>Genuine Purchase Intent:</strong> Customers who already walked onto your lot, picked a car, and signed paperwork.
+            </li>
+            <li>
+              <strong>Tripped Automated Tripwires:</strong> Declined over solvable bureau flags, small arrears, DTI ratios, or 90-day statement conduct.
+            </li>
+            <li>
+              <strong>Our Exclusive Focus:</strong> Bucket 2 represents <strong>70% to 80%</strong> of your showroom declines — the <strong>only</strong> place we operate.
+            </li>
+          </ul>
+          <div class="q-fail q-fix" style="border-color: rgba(0,212,170,0.2);">
+            <strong>100% Bankable Focus:</strong> Every file we accept is mathematically viable for showroom delivery.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 9: The 3 Questions Every Bank Asks (Script Block 11) -->
+  <div class="slide" data-slide="9" data-title="The 3 Questions Every Bank Asks">
+    <div class="custom-slide">
+      <div class="slide-header">
+        <span class="slide-kicker">DECODING THE BANK ALGORITHM</span>
+        <h1 class="slide-title">The 3 Simple Questions Every Bank Asks</h1>
+        <p class="slide-subtitle">
+          When a lender scores your customer on Signio, they aren't using mysterious code — their system is testing three plain questions. Fail even one, and the deal declines.
+        </p>
+      </div>
+
+      <div class="grid-3">
+        <div class="card blue">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div class="q-num blue">1</div>
+            <div class="q-title">The Debt Question</div>
+          </div>
+          <p class="q-quote">
+            "Does this person owe anyone money right now, and are they actually paying the people they owe on time — or are there unpaid accounts and old arrears hanging over their head?"
+          </p>
+          <div class="q-fail">
+            <strong>Tripwire:</strong> Even small forgotten arrears or un-updated settled accounts trigger instant bureau red lights.
+          </div>
+        </div>
+
+        <div class="card amber">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div class="q-num amber">2</div>
+            <div class="q-title">The Bread Question</div>
+          </div>
+          <p class="q-quote">
+            "After they've paid everyone they owe, do they have enough money left over to pay our vehicle installment every month and still buy bread for their family for the next 30 days?"
+          </p>
+          <div class="q-fail">
+            <strong>Tripwire:</strong> High Debt-to-Income commitments leave insufficient disposable surplus on paper.
+          </div>
+        </div>
+
+        <div class="card emerald">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div class="q-num emerald">3</div>
+            <div class="q-title">The Conduct Question</div>
+          </div>
+          <p class="q-quote">
+            "Day-to-day, how does this person actually live with their money? Are debit orders bouncing or living inside an overdraft with zero buffer — or do statements show responsible cash management?"
+          </p>
+          <div class="q-fail">
+            <strong>Tripwire:</strong> Unpaid debit orders and zero-buffer payday behavior signal immediate default risk.
+          </div>
+        </div>
+      </div>
+
+      <div class="callout-banner">
+        Simply put: CBF gets your declined buyers to <strong>live for 90 days as if they already own the vehicle</strong> — proving to banks they comfortably afford it.
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 10: How CBF Fixes All 3 Gates -->
+  <div class="slide" data-slide="10" data-title="How CBF Clears All 3 Bank Gates">
+    <div class="custom-slide">
+      <div class="slide-header">
+        <span class="slide-kicker">THE CREDIT BUILDER FLOW ENGINE</span>
+        <h1 class="slide-title">Turning "Algorithm Declines" Into Green Approvals</h1>
+        <p class="slide-subtitle">
+          We fix the exact three checkpoints the banks test — transforming rejected applicants into clean, low-risk borrowers ready for Signio re-submission.
+        </p>
+      </div>
+
+      <div class="grid-3">
+        <div class="card">
+          <span class="pill-tag blue">1 · CLEARING DEBT</span>
+          <div class="s7m-card-title">Arrears &amp; Bureau Sync</div>
+          <ul class="check-list emerald">
+            <li>Identify and settle small blocking arrears &amp; overdue accounts.</li>
+            <li>Obtain formal paid-up clearance letters and track the 30-day bureau update cycle.</li>
+            <li>Dispute outdated or unlawful adverse listings under NCA rights.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <span class="pill-tag amber">2 · FIXING THE BREAD BUFFER</span>
+          <div class="s7m-card-title">Affordability &amp; DTI Alignment</div>
+          <ul class="check-list emerald">
+            <li>Prioritize paying off high-installment short-term loans choking DTI capacity.</li>
+            <li>Rebalance monthly debt service so net income supports the vehicle installment.</li>
+            <li>Validate true disposable cash surplus against NCA thresholds.</li>
+          </ul>
+        </div>
+
+        <div class="card emerald">
+          <span class="pill-tag emerald">3 · PROVING CONDUCT</span>
+          <div class="s7m-card-title">90-Day Statement Seasoning</div>
+          <ul class="check-list emerald">
+            <li>Eliminate bounced debit orders, unpaids, and overdraft reliance.</li>
+            <li>Coach buyers to retain a healthy monthly cash buffer (simulating the car payment).</li>
+            <li>Deliver 3 consecutive prime-grade bank statements back to your desk.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout-banner">
+        Result: When your F&amp;I re-submits on Signio, the bank sees <strong>clean bureau data, verified affordability, and 90 days of disciplined conduct.</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 11: The 3 Recovery Timelines & Case Studies (Referenced as Slide 11 in Script!) -->
+  <div class="slide" data-slide="11" data-title="3 Recovery Timelines & Case Studies (Slide 11)">
+    <div class="custom-slide" style="padding: 26px 46px 78px;">
+      <div class="slide-header" style="margin-bottom: 10px;">
+        <span class="slide-kicker">RECOVERY HORIZONS &amp; REAL CASE STUDIES</span>
+        <h1 class="slide-title" style="font-size: clamp(24px, 2.7vw, 36px); margin-bottom: 4px;">
+          The 3 Lead Recovery Timelines
+        </h1>
+        <p class="slide-subtitle" style="font-size: 14px;">
+          Every buyer you refer falls into one of three predictable timelines — managed 100% off-site by our desk.
+        </p>
+      </div>
+
+      <!-- Animated SVG Bell Curve -->
+      <div class="s11-curve-box">
+        <svg viewBox="0 0 1000 265" class="s11-svg" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <linearGradient id="bellStroke" x1="0%" y1="0%" x2="100%" y2="0%">
               <stop offset="0%" stop-color="#60a5fa" />
@@ -776,150 +1268,387 @@
             </filter>
           </defs>
 
-          <!-- Subtle Background Grid -->
           <line x1="60" y1="80" x2="940" y2="80" stroke="rgba(255,255,255,0.04)" stroke-dasharray="4 6" />
           <line x1="60" y1="140" x2="940" y2="140" stroke="rgba(255,255,255,0.04)" stroke-dasharray="4 6" />
 
-          <!-- Shaded Area Under Bell Curve -->
           <path class="bell-curve-fill" d="M 60 218 L 80 217 L 100 216 L 120 214 L 140 211 L 160 207 L 180 202 L 200 195 L 220 186 L 240 175 L 260 162 L 280 147 L 300 131 L 320 114 L 340 98 L 360 83 L 380 70 L 400 60 L 420 53 L 440 49 L 460 47 L 480 46 L 500 45 L 520 46 L 540 47 L 560 49 L 580 53 L 600 60 L 620 70 L 640 83 L 660 98 L 680 114 L 700 131 L 720 147 L 740 162 L 760 175 L 780 186 L 800 195 L 820 202 L 840 207 L 860 211 L 880 214 L 900 216 L 920 217 L 940 218 L 940 230 L 60 230 Z" fill="url(#bellFill)" />
-
-          <!-- Glowing Main Bell Curve Stroke -->
           <path class="bell-curve-stroke" d="M 60 218 L 80 217 L 100 216 L 120 214 L 140 211 L 160 207 L 180 202 L 200 195 L 220 186 L 240 175 L 260 162 L 280 147 L 300 131 L 320 114 L 340 98 L 360 83 L 380 70 L 400 60 L 420 53 L 440 49 L 460 47 L 480 46 L 500 45 L 520 46 L 540 47 L 560 49 L 580 53 L 600 60 L 620 70 L 640 83 L 660 98 L 680 114 L 700 131 L 720 147 L 740 162 L 760 175 L 780 186 L 800 195 L 820 202 L 840 207 L 860 211 L 880 214 L 900 216 L 920 217 L 940 218" fill="none" stroke="url(#bellStroke)" stroke-width="3.5" stroke-linecap="round" filter="url(#curveGlow)" />
 
-          <!-- Axis Baseline -->
           <line x1="40" y1="230" x2="960" y2="230" stroke="rgba(255,255,255,0.15)" stroke-width="1.5" />
 
-          <!-- Vertical Indicator Connectors -->
           <line class="bell-indicator-line" x1="240" y1="175" x2="240" y2="235" stroke="#3b82f6" stroke-dasharray="3 3" stroke-width="1.5" />
           <line class="bell-indicator-line" x1="500" y1="45" x2="500" y2="235" stroke="#00d4aa" stroke-dasharray="3 3" stroke-width="1.5" />
           <line class="bell-indicator-line" x1="760" y1="175" x2="760" y2="235" stroke="#ffa502" stroke-dasharray="3 3" stroke-width="1.5" />
 
-          <!-- Luminous Traveling Particle -->
           <circle r="4" fill="#ffffff" filter="url(#curveGlow)">
             <animateMotion dur="4s" repeatCount="indefinite" path="M 60 218 L 80 217 L 100 216 L 120 214 L 140 211 L 160 207 L 180 202 L 200 195 L 220 186 L 240 175 L 260 162 L 280 147 L 300 131 L 320 114 L 340 98 L 360 83 L 380 70 L 400 60 L 420 53 L 440 49 L 460 47 L 480 46 L 500 45 L 520 46 L 540 47 L 560 49 L 580 53 L 600 60 L 620 70 L 640 83 L 660 98 L 680 114 L 700 131 L 720 147 L 740 162 L 760 175 L 780 186 L 800 195 L 820 202 L 840 207 L 860 211 L 880 214 L 900 216 L 920 217 L 940 218" />
           </circle>
 
-          <!-- Node 1: Fast-Track -->
           <circle cx="240" cy="175" r="12" fill="#3b82f6" class="bell-pulse-halo" />
           <circle cx="240" cy="175" r="5" fill="none" stroke="#60a5fa" class="bell-radar-ring" />
           <circle cx="240" cy="175" r="5" fill="#3b82f6" stroke="#ffffff" stroke-width="1.5" />
 
-          <!-- Node 2: Peak Apex (90 Days) -->
           <circle cx="500" cy="45" r="16" fill="#00d4aa" class="bell-pulse-halo" />
           <circle cx="500" cy="45" r="6" fill="none" stroke="#00d4aa" class="bell-radar-ring" />
           <circle cx="500" cy="45" r="6" fill="none" stroke="#55efc4" class="bell-radar-ring-delayed" />
           <circle cx="500" cy="45" r="7" fill="#00d4aa" stroke="#ffffff" stroke-width="2.5" />
 
-          <!-- Node 3: Deep Restructure -->
           <circle cx="760" cy="175" r="12" fill="#ffa502" class="bell-pulse-halo" />
           <circle cx="760" cy="175" r="5" fill="none" stroke="#fed330" class="bell-radar-ring" />
           <circle cx="760" cy="175" r="5" fill="#ffa502" stroke="#ffffff" stroke-width="1.5" />
 
-          <!-- Timeline Labels Below Axis -->
-          <text x="240" y="254" text-anchor="middle" fill="#60a5fa" font-size="15" font-weight="700" font-family="'Montserrat', sans-serif">45 – 60 DAYS</text>
-          <text x="500" y="254" text-anchor="middle" fill="#00d4aa" font-size="16" font-weight="800" font-family="'Montserrat', sans-serif">90 DAYS (CORE PEAK)</text>
-          <text x="760" y="254" text-anchor="middle" fill="#ffa502" font-size="15" font-weight="700" font-family="'Montserrat', sans-serif">6 MONTHS</text>
+          <text x="240" y="254" text-anchor="middle" fill="#60a5fa" font-size="14" font-weight="800" font-family="'Montserrat', sans-serif">45 – 60 DAYS</text>
+          <text x="500" y="254" text-anchor="middle" fill="#00d4aa" font-size="15" font-weight="900" font-family="'Montserrat', sans-serif">90 DAYS (THE CORE)</text>
+          <text x="760" y="254" text-anchor="middle" fill="#ffa502" font-size="14" font-weight="800" font-family="'Montserrat', sans-serif">6 MONTHS+</text>
         </svg>
       </div>
 
-      <!-- Minimal 3-Horizon Summary Pods -->
-      <div class="s10-pods-row">
-        <div class="s10-pod">
-          <div class="s10-pod-metric" style="color: #60a5fa;">~10%</div>
-          <div class="s10-pod-label">Fast-Track Clearance</div>
-          <div class="s10-pod-desc">Paid accounts &amp; bureau dispute updates</div>
+      <!-- 3 Category Case Study Pods Matching Script (Khumbuzile, Busi, Lawrence) -->
+      <div class="s11-pods-row">
+        <!-- Category 3: Quick Wins -->
+        <div class="s11-pod" style="border-color: var(--blue-border); background: var(--blue-bg);">
+          <div class="s11-pod-top">
+            <span class="s11-cat-label" style="color: var(--blue);">Cat 3 · Quick Wins</span>
+            <span class="s11-pct" style="color: var(--blue);">~10%</span>
+          </div>
+          <div class="s11-case-name">Case Study: Khumbuzile</div>
+          <p class="s11-case-detail">
+            Earned <strong>R25,000+/mo</strong> with flawless bank conduct, yet declined across all lenders over a 3-month overdue <strong>R300 MTN account</strong>. Only bottleneck was bureau reporting lag.
+          </p>
+          <div class="s11-case-result" style="color: var(--blue);">
+            Settled R300 + 30d bureau sync → Day 45 Signio Approved
+          </div>
         </div>
 
-        <div class="s10-pod featured">
-          <div class="s10-pod-metric" style="color: #00d4aa;">~75%</div>
-          <div class="s10-pod-label" style="color: #00d4aa;">Primary Recovery Sweet Spot</div>
-          <div class="s10-pod-desc">90-day bank statement seasoning &amp; conduct repair</div>
+        <!-- Category 2: The Core (90 Days) -->
+        <div class="s11-pod featured">
+          <div class="s11-pod-top">
+            <span class="s11-cat-label" style="color: var(--emerald);">Cat 2 · The Core</span>
+            <span class="s11-pct" style="color: var(--emerald);">70%–80%</span>
+          </div>
+          <div class="s11-case-name">Case Study: Busi</div>
+          <p class="s11-case-detail">
+            Substantial arrears plus <strong>unpaids &amp; overdraft</strong> gave near-zero approval odds. First 30 days cleared arrears; simultaneously coached 90 days of disciplined banking as if paying the installment.
+          </p>
+          <div class="s11-case-result" style="color: var(--emerald);">
+            Day 90 prime-grade statements → Re-applied &amp; Funded
+          </div>
         </div>
 
-        <div class="s10-pod">
-          <div class="s10-pod-metric" style="color: #ffa502;">~15%</div>
-          <div class="s10-pod-label">Deep Restructuring</div>
-          <div class="s10-pod-desc">Aggressive debt pay-downs &amp; DTI rehabilitation</div>
+        <!-- Category 1: Deep Restructuring -->
+        <div class="s11-pod" style="border-color: var(--amber-border); background: var(--amber-bg);">
+          <div class="s11-pod-top">
+            <span class="s11-cat-label" style="color: var(--amber);">Cat 1 · Deep Restructure</span>
+            <span class="s11-pct" style="color: var(--amber);">10%–20%</span>
+          </div>
+          <div class="s11-case-name">Case Study: Lawrence</div>
+          <p class="s11-case-detail">
+            <strong>Debt-to-Income over 80%</strong> of salary. First 60 days aggressively restructured &amp; paid down debt; next 90 days seasoned clean cash flow to prove affordability.
+          </p>
+          <div class="s11-case-result" style="color: var(--amber);">
+            60d debt pay-down + 90d conduct → ~6 Months Delivered
+          </div>
         </div>
       </div>
 
+      <div class="callout-banner" style="margin-top: 14px; padding: 12px 20px; font-size: 14.5px;">
+        Across <strong>Lawrence, Busi &amp; Khumbuzile</strong> — your dealership never had to wait or do any work. You sent the link, we managed the calendar, your floor banked the delivery.
+      </div>
     </div>
   </div>
 
-  <!-- SLIDE 12: Client Results - Thabile + Scores (Original Canva Slide) -->
-  <div class="slide" data-slide="12">
+  <!-- SLIDE 12: Client Results - Bureau Score Jumps (Original Canva Slide) -->
+  <div class="slide" data-slide="12" data-title="Verified Proof — Score Jumps & Delivery">
     <img src="slides_img/slide_11.png" class="slide-img" alt="Client Results - Score Jumps (+78, +86) and Delivery">
   </div>
 
-  <!-- SLIDE 13: Client Results - VW Delivery + 620 Score (Perfected Slide 12) -->
-  <div class="slide" data-slide="13">
+  <!-- SLIDE 13: Client Results - VW Delivery & 620 Score (Original Canva Slide) -->
+  <div class="slide" data-slide="13" data-title="Verified Proof — VW Handover & 620+ Scores">
     <img src="slides_img/slide_12.png" class="slide-img" alt="Client Results - 620 Credit Scores & VW Delivery">
   </div>
 
-  <!-- SLIDE 14: Client Results - Roderick Hennessy + Scores (Original Canva Slide) -->
-  <div class="slide" data-slide="14">
-    <img src="slides_img/slide_14.png" class="slide-img" alt="Client Results - Roderick Delivery with Hennessy & 694 Score">
+  <!-- SLIDE 14: Zero-Lift Desk Reality (Script Block 13) -->
+  <div class="slide" data-slide="14" data-title="Zero-Lift Desk Reality">
+    <div class="custom-slide">
+      <div class="slide-header">
+        <span class="slide-kicker">THE ZERO-LIFT WORKFLOW</span>
+        <h1 class="slide-title">Zero Admin. Zero Counseling. One Single Link.</h1>
+        <p class="slide-subtitle">
+          No more 45-minute file builds turning into unpaid therapy or dead leads rotting in your CRM. Your team performs one 10-second action — we handle the rest off-site.
+        </p>
+      </div>
+
+      <div class="grid-3">
+        <div class="card emerald">
+          <span class="flow-step-num" style="color: var(--emerald);">STEP 01 · YOUR DESK (10 SECONDS)</span>
+          <div class="flow-step-title">Send Your Referral Link</div>
+          <p class="flow-step-body">
+            When Signio returns a decline, your F&amp;I or sales exec simply sends your store's unique referral link to the customer via WhatsApp. <strong>That is literally all your team does.</strong>
+          </p>
+        </div>
+
+        <div class="card">
+          <span class="flow-step-num" style="color: var(--blue);">STEP 02 · CBF OFF-SITE DESK</span>
+          <div class="flow-step-title">We Resolve Every Blocker</div>
+          <p class="flow-step-body">
+            From that second, our underwriting desk collects Section 11 POPIA consent, audits statements, clears arrears, and guides the buyer's 90-day rehabilitation — completely off-site.
+          </p>
+        </div>
+
+        <div class="card emerald">
+          <span class="flow-step-num" style="color: var(--emerald);">STEP 03 · YOUR SHOWROOM</span>
+          <div class="flow-step-title">Re-Submit &amp; Deliver</div>
+          <p class="flow-step-body">
+            The next time your desk touches the file, the buyer returns with clean bureau records and prime-grade statements. You simply re-submit on Signio and deliver the vehicle.
+          </p>
+        </div>
+      </div>
+
+      <div class="callout-banner" style="font-size: clamp(17px, 1.5vw, 22px);">
+        <strong>Send a link &nbsp;→&nbsp; Take the approval &nbsp;→&nbsp; Deliver the vehicle.</strong>
+      </div>
+    </div>
   </div>
 
-  <!-- SLIDE 15: EDITED — Performance-Based Partnership (Updated Pricing R6,000 / 5%) -->
-  <div class="slide" data-slide="15">
+  <!-- SLIDE 15: Lead Exclusivity Guarantee (Script Block 14) -->
+  <div class="slide" data-slide="15" data-title="100% Lead Exclusivity Guarantee">
     <div class="custom-slide">
-      <h1 class="underline-title" style="margin-bottom: 36px;">
-        PERFORMANCE-BASED PARTNERSHIP
-      </h1>
+      <div class="slide-header">
+        <span class="slide-kicker">LEAD SOVEREIGNTY &amp; PROTECTION</span>
+        <h1 class="slide-title">Locked Exclusively to Your Showroom Floor</h1>
+        <p class="slide-subtitle">
+          "What stops you from taking my rehabilitated buyer and selling them to the dealership down the road?"
+        </p>
+      </div>
 
-      <div class="s14-grid">
+      <div class="grid-3">
+        <div class="card red">
+          <span class="pill-tag red">REPUTATION REALITY</span>
+          <div class="s7m-card-title">Poaching = Commercial Suicide</div>
+          <p class="s7m-card-copy">
+            In the South African motor industry, Dealer Principals and F&amp;Is talk every day. Flipping even one dealership's buyer to a competitor would get us blacklisted permanently within months.
+          </p>
+        </div>
+
+        <div class="card">
+          <span class="pill-tag blue">LONG-TERM ECONOMICS</span>
+          <div class="s7m-card-title">3–5 Year Partner Math</div>
+          <p class="s7m-card-copy">
+            Rehabilitating 20, 30, or 50 of your declined buyers every year generates hundreds of thousands in clean repeat partnership revenue — vastly outperforming flipping a single deal.
+          </p>
+        </div>
+
+        <div class="card emerald">
+          <span class="pill-tag emerald">CONTRACTUAL LOCK</span>
+          <div class="s7m-card-title">Hardcoded Exclusivity</div>
+          <p class="s7m-card-copy">
+            Every referral link is tagged strictly to your dealership in our bilateral pilot agreement. <strong>We only win when that car drives off YOUR showroom floor.</strong>
+          </p>
+        </div>
+      </div>
+
+      <div class="callout-banner">
+        Morals aside, <strong>pure economics &amp; written contract terms</strong> lock 100% of your rehabilitated buyers to your dealership.
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 16: Performance-Based Partnership & Destination Math (Script Block 15) -->
+  <div class="slide" data-slide="16" data-title="Commercials & Live Destination Math">
+    <div class="custom-slide">
+      <div class="slide-header" style="margin-bottom: 18px;">
+        <span class="slide-kicker">COMMERCIAL STRUCTURE &amp; DESTINATION MATH</span>
+        <h1 class="slide-title underline-title" style="margin-bottom: 6px;">PERFORMANCE-BASED PARTNERSHIP</h1>
+      </div>
+
+      <div class="s16-grid">
         <!-- Left Column: Pricing Structure -->
-        <div class="s14-col">
-          <h2>Pricing Structure:</h2>
-          <ul class="s14-list">
+        <div class="card">
+          <div class="s16-col-title">Pricing Structure:</div>
+          <ul class="check-list dot" style="gap: 16px;">
             <li>
               <strong>Vehicles Under R130,000:</strong><br>
-              <span class="s14-highlight" style="font-size: 20px; font-weight: 800;">R6,000 flat</span> handling fee per successfully recovered deal.
+              <span style="color: var(--emerald); font-size: 19px; font-weight: 800;">R6,000 flat</span> handling fee upon successful delivery.
             </li>
             <li>
               <strong>Vehicles R130,000 and Above:</strong><br>
-              <span class="s14-highlight" style="font-size: 20px; font-weight: 800;">5.0% of vehicle retail price</span> on successfully funded delivery.
+              <span style="color: var(--emerald); font-size: 19px; font-weight: 800;">5.0% of vehicle retail price</span> upon successfully funded delivery.
             </li>
             <li>
-              <strong>Zero Retainers:</strong> No monthly subscriptions or hidden "platform fees".
+              <strong>R0 Upfront Cost · R0 Monthly Retainers · R0 Tech Fees.</strong>
             </li>
             <li>
-              <strong>Pure Contingency:</strong> We only earn when you successfully close and bank a deal from a CBF-recovered buyer.
+              <strong>Pure Contingency:</strong> Payable ONLY once the vehicle is delivered and funded by the bank.
             </li>
             <li>
-              <strong>Zero Risk Guarantee:</strong> If the customer does not take delivery of a car from your floor, you owe R0.
+              <strong>Zero Risk Guarantee:</strong> If the buyer does not take delivery from your floor, you owe us <strong>R0</strong>.
             </li>
           </ul>
         </div>
 
-        <!-- Right Column: Dealership Benefits -->
-        <div class="s14-col">
-          <h2>Dealership Benefits:</h2>
-          <ul class="s14-list">
-            <li>
-              <strong>100% Risk-Free:</strong> No upfront capital expenditure (CAPEX) required. Risk-free entry into the system.
-            </li>
-            <li>
-              <strong>Exclusively Protected:</strong> Triple-lock commercial guarantee routing buyers strictly back to your showroom floor.
-            </li>
-            <li>
-              <strong>Recover "Lost" Revenue:</strong> Turn cold turn-downs and "failed-credit" files into bankable showroom deliveries.
-            </li>
-            <li>
-              <strong>Seamless Integration:</strong> Zero additional administrative burden for your F&I team — 30 seconds to refer, we handle the rest off-site.
-            </li>
-          </ul>
+        <!-- Right Column: Live Destination Math -->
+        <div class="card emerald">
+          <div class="s16-col-title" style="margin-bottom: 12px;">Your Floor's Destination Math:</div>
+
+          <div class="math-inputs">
+            <div class="math-field">
+              <label for="calc-apps">Monthly Apps</label>
+              <input type="number" id="calc-apps" value="50" min="5" step="5">
+            </div>
+            <div class="math-field">
+              <label for="calc-decline">Decline Rate (%)</label>
+              <input type="number" id="calc-decline" value="50" min="5" max="95" step="5">
+            </div>
+            <div class="math-field">
+              <label for="calc-margin">Avg Gross / Deal (R)</label>
+              <input type="number" id="calc-margin" value="20000" min="5000" step="1000">
+            </div>
+            <div class="math-field">
+              <label for="calc-recovered">Recovered Deals / Mo</label>
+              <input type="number" id="calc-recovered" value="5" min="1" max="50" step="1">
+            </div>
+          </div>
+
+          <div class="math-results">
+            <div class="math-kpi bleed">
+              <div class="math-kpi-label">CRM Graveyard Bleed</div>
+              <div class="math-kpi-val" style="color: var(--red);" id="out-monthly-bleed">R 500,000 / mo</div>
+              <div class="math-kpi-sub"><span id="out-declined-units">25</span> declined buyers generating R0</div>
+            </div>
+
+            <div class="math-kpi gain">
+              <div class="math-kpi-label">Found Gross Profit</div>
+              <div class="math-kpi-val" style="color: var(--emerald);" id="out-recovered-rev">R 100,000 / mo</div>
+              <div class="math-kpi-sub">Just <span id="out-recovered-units">5</span> recovered units (<span id="out-annual-rev">R 1,200,000</span>/yr)</div>
+            </div>
+          </div>
+
+          <p style="font-family:'Inter',sans-serif; font-size: 13.5px; color: var(--text-body); line-height: 1.5; margin-top: 4px;">
+            Unlocking <strong style="color: var(--emerald);">found money</strong> from leads you already paid for — with <strong>zero capital risk</strong>.
+          </p>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- SLIDE 16: Thank You (Original Canva Slide) -->
-  <div class="slide" data-slide="16">
+  <!-- SLIDE 17: The 3 Decisions Anchor (Script Block 18) -->
+  <div class="slide" data-slide="17" data-title="The 3 Decisions on the Table">
+    <div class="custom-slide">
+      <div class="slide-header">
+        <span class="slide-kicker">THE ONLY 3 REAL CHOICES TODAY</span>
+        <h1 class="slide-title">Look at the 3 Decisions on the Table</h1>
+        <p class="slide-subtitle">
+          Before daily showroom fires make the decision for you by default, compare the real downside and upside of all three options.
+        </p>
+      </div>
+
+      <div class="grid-3">
+        <!-- Decision 1 -->
+        <div class="card red">
+          <span class="d-card-head" style="color: var(--red);">DECISION 1</span>
+          <div class="d-card-title">Choose Not to Work With Us</div>
+          <ul class="check-list red">
+            <li>Nothing changes on your floor.</li>
+            <li>Turned-down buyers continue walking out empty-handed.</li>
+            <li>Your store keeps forfeiting <strong id="d1-bleed">R 500,000</strong>/mo in retail gross to bank algorithms.</li>
+          </ul>
+          <div class="d-outcome red">
+            Guaranteed Bleed Continues
+          </div>
+        </div>
+
+        <!-- Decision 2 -->
+        <div class="card">
+          <span class="d-card-head" style="color: var(--text-muted);">DECISION 2</span>
+          <div class="d-card-title">Test Us &amp; We Fall Flat</div>
+          <ul class="check-list dot">
+            <li>We take last week's declined files and fail to recover a single car.</li>
+            <li><strong>R0 upfront fees</strong> &amp; <strong>R0 monthly retainers</strong> paid.</li>
+            <li>Zero F&amp;I selling hours lost &amp; your bank relationships untouched.</li>
+          </ul>
+          <div class="d-outcome neutral">
+            Identical Downside: You Lose R0
+          </div>
+        </div>
+
+        <!-- Decision 3 -->
+        <div class="card emerald">
+          <span class="d-card-head" style="color: var(--emerald);">DECISION 3</span>
+          <div class="d-card-title">It Works Like We Showed You</div>
+          <ul class="check-list emerald">
+            <li>Our underwriters clear blockers on the <strong id="d3-declined">25</strong> buyers banks declined.</li>
+            <li>We put just <strong id="d3-units">5</strong> extra banked deals over your curb/month.</li>
+            <li>You capture <strong id="d3-rev">R 100,000</strong>/mo in retained gross already written off as dead.</li>
+          </ul>
+          <div class="d-outcome emerald">
+            Pure Upside: Found Floor Profit
+          </div>
+        </div>
+      </div>
+
+      <div class="callout-banner">
+        Between Decision 1 and Decision 2, <strong>your downside is zero</strong> — why not make the call that actually has the upside for your floor?
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 18: The 30-Day Sandbox Pilot (Script Block 19) -->
+  <div class="slide" data-slide="18" data-title="The 30-Day Sandbox Pilot">
+    <div class="custom-slide">
+      <div class="slide-header">
+        <span class="slide-kicker">ZERO-FRICTION NEXT STEP</span>
+        <h1 class="slide-title">Let's Prove It With a 30-Day Sandbox Pilot</h1>
+        <p class="slide-subtitle">
+          No complex multi-year contracts and no operational disruption. Prove the recovery math on leads you have already written off.
+        </p>
+      </div>
+
+      <div class="grid-3">
+        <div class="card">
+          <span class="flow-step-num" style="color: var(--blue);">01 · PULL DEAD FILES</span>
+          <div class="flow-step-title">Send 5 to 10 Declined Files</div>
+          <p class="flow-step-body">
+            Grab 5 to 10 turned-down Signio applications from last week — buyers who already walked off your lot and generated R0.
+          </p>
+        </div>
+
+        <div class="card">
+          <span class="flow-step-num" style="color: var(--amber);">02 · TRIAGE &amp; REHABILITATE</span>
+          <div class="flow-step-title">Off-Site Underwriting Track</div>
+          <p class="flow-step-body">
+            We immediately separate unrecoverables, onboard viable buyers onto their recovery track, and update your desk on progress.
+          </p>
+        </div>
+
+        <div class="card emerald">
+          <span class="flow-step-num" style="color: var(--emerald);">03 · RISK-FREE PROOF</span>
+          <div class="flow-step-title">Deliver or Walk Away at R0</div>
+          <p class="flow-step-body">
+            If we don't produce clean, pre-approved buyers ready to take delivery from your floor, you walk away having spent <strong>zero Rand</strong>.
+          </p>
+        </div>
+      </div>
+
+      <div class="callout-banner" style="font-size: clamp(16px, 1.45vw, 21px); padding: 22px 28px;">
+        Next Step Today: <strong>Can we grab 5 of last week's declined files off Signio so we can get started?</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 19: Thank You (Original Canva Slide) -->
+  <div class="slide" data-slide="19" data-title="Thank You — Volve Media">
     <img src="slides_img/slide_15.png" class="slide-img" alt="Thank You - Volve Media Present by Kea">
   </div>
 
+</div>
+
+<!-- ── Slide Index Drawer Overlay ([G] or click slide counter) ── -->
+<div class="index-overlay" id="indexOverlay">
+  <div class="index-header">
+    <h2>Presentation Slides (Aligned to C.L.O.S.E.R. Script)</h2>
+    <button class="nav-btn" id="closeIndexBtn">Close [Esc]</button>
+  </div>
+  <div class="index-grid" id="indexGrid"></div>
 </div>
 
 <!-- ── Navigation Bar ── -->
@@ -928,19 +1657,45 @@
   <div class="progress-wrap">
     <div class="progress-bar" id="progressBar"></div>
   </div>
-  <div class="key-hint">Press <strong>[Space]</strong> or <strong>[→]</strong> &nbsp;|&nbsp; <strong>[F]</strong> for Fullscreen</div>
-  <div class="slide-indicator" id="slideIndicator">01 / 16</div>
+  <div class="key-hint"><strong>[Space]</strong> / <strong>[→]</strong> Next &nbsp;|&nbsp; <strong>[G]</strong> Slides &nbsp;|&nbsp; <strong>[F]</strong> Fullscreen</div>
+  <button class="slide-indicator" id="slideIndicator" title="Open Slide Index [G]">01 / 19</button>
   <button class="nav-btn" id="nextBtn" onclick="navigate(1)">Next →</button>
 </div>
 
 <script>
   const slides = document.querySelectorAll('.slide');
   const totalSlides = slides.length;
+  const indexOverlay = document.getElementById('indexOverlay');
+  const indexGrid = document.getElementById('indexGrid');
   let currentSlide = 0;
+
+  function renderIndex() {
+    indexGrid.innerHTML = '';
+    slides.forEach((slide, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'index-item' + (i === currentSlide ? ' current' : '');
+      const num = (i + 1).toString().padStart(2, '0');
+      const title = slide.getAttribute('data-title') || `Slide ${num}`;
+      btn.innerHTML = `<div class="index-item-num">Slide ${num}</div><div class="index-item-title">${title}</div>`;
+      btn.addEventListener('click', () => {
+        currentSlide = i;
+        showSlide(currentSlide);
+        toggleIndex(false);
+      });
+      indexGrid.appendChild(btn);
+    });
+  }
+
+  function toggleIndex(forceState) {
+    const isOpen = typeof forceState === 'boolean' ? forceState : !indexOverlay.classList.contains('open');
+    indexOverlay.classList.toggle('open', isOpen);
+    if (isOpen) renderIndex();
+  }
 
   function showSlide(index) {
     slides.forEach((slide, i) => {
       slide.classList.toggle('active', i === index);
+      if (i === index) slide.scrollTop = 0;
     });
     const progressPct = ((index + 1) / totalSlides) * 100;
     document.getElementById('progressBar').style.width = progressPct + '%';
@@ -954,19 +1709,93 @@
     showSlide(currentSlide);
   }
 
-  // Check initial hash
-  const hashMatch = window.location.hash.match(/slide=(\d+)/);
-  if (hashMatch) {
-    currentSlide = Math.max(0, Math.min(totalSlides - 1, parseInt(hashMatch[1]) - 1));
+  // Destination Math Calculator (Synced to Slide 16 & Slide 17)
+  const calcApps = document.getElementById('calc-apps');
+  const calcDecline = document.getElementById('calc-decline');
+  const calcMargin = document.getElementById('calc-margin');
+  const calcRecovered = document.getElementById('calc-recovered');
+
+  function formatRand(num) {
+    return 'R ' + Math.round(num).toLocaleString('en-ZA');
   }
-  showSlide(currentSlide);
+
+  function updateDestinationMath() {
+    const apps = Math.max(0, Number(calcApps.value) || 0);
+    const declinePct = Math.max(0, Math.min(100, Number(calcDecline.value) || 0));
+    const margin = Math.max(0, Number(calcMargin.value) || 0);
+    const recovered = Math.max(0, Number(calcRecovered.value) || 0);
+
+    const declinedUnits = Math.round(apps * (declinePct / 100));
+    const monthlyBleed = declinedUnits * margin;
+    const recoveredRev = recovered * margin;
+    const annualRev = recoveredRev * 12;
+
+    document.getElementById('out-declined-units').textContent = declinedUnits;
+    document.getElementById('out-monthly-bleed').textContent = formatRand(monthlyBleed) + ' / mo';
+    document.getElementById('out-recovered-units').textContent = recovered;
+    document.getElementById('out-recovered-rev').textContent = formatRand(recoveredRev) + ' / mo';
+    document.getElementById('out-annual-rev').textContent = formatRand(annualRev);
+
+    // Sync Slide 17 (The 3 Decisions)
+    document.getElementById('d1-bleed').textContent = formatRand(monthlyBleed);
+    document.getElementById('d3-declined').textContent = declinedUnits;
+    document.getElementById('d3-units').textContent = recovered;
+    document.getElementById('d3-rev').textContent = formatRand(recoveredRev);
+  }
+
+  [calcApps, calcDecline, calcMargin, calcRecovered].forEach((input) => {
+    input.addEventListener('input', updateDestinationMath);
+  });
+  updateDestinationMath();
+
+  // Slide Index Triggers
+  document.getElementById('slideIndicator').addEventListener('click', () => toggleIndex());
+  document.getElementById('closeIndexBtn').addEventListener('click', () => toggleIndex(false));
+
+  // Check initial hash and support hash changes
+  function syncFromHash() {
+    const hashMatch = window.location.hash.match(/slide=(\d+)/);
+    if (hashMatch) {
+      currentSlide = Math.max(0, Math.min(totalSlides - 1, parseInt(hashMatch[1], 10) - 1));
+    }
+    showSlide(currentSlide);
+  }
+  syncFromHash();
+  window.addEventListener('hashchange', syncFromHash);
+
   document.addEventListener('keydown', (e) => {
+    if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) {
+      return;
+    }
+
+    if (e.key === 'Escape' && indexOverlay.classList.contains('open')) {
+      e.preventDefault();
+      toggleIndex(false);
+      return;
+    }
+
+    if (e.key === 'g' || e.key === 'G') {
+      e.preventDefault();
+      toggleIndex();
+      return;
+    }
+
+    if (indexOverlay.classList.contains('open')) return;
+
     if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ' || e.key === 'PageDown') {
       e.preventDefault();
       navigate(1);
     } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key === 'PageUp' || e.key === 'Backspace') {
       e.preventDefault();
       navigate(-1);
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      currentSlide = 0;
+      showSlide(currentSlide);
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      currentSlide = totalSlides - 1;
+      showSlide(currentSlide);
     } else if (e.key === 'f' || e.key === 'F') {
       if (!document.fullscreenElement) {
         document.documentElement.requestFullscreen().catch(() => {});
@@ -983,14 +1812,13 @@
   }, { passive: true });
 
   document.addEventListener('touchend', (e) => {
+    if (indexOverlay.classList.contains('open')) return;
     const touchEndX = e.changedTouches[0].clientX;
     const diff = touchStartX - touchEndX;
     if (Math.abs(diff) > 40) {
       navigate(diff > 0 ? 1 : -1);
     }
   }, { passive: true });
-
-  showSlide(currentSlide);
 </script>
 
 </body>
