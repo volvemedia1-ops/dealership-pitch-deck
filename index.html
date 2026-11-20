@@ -896,9 +896,61 @@
     line-height: 1.35;
   }
 
+  /* ── Performance-Based Partnership Slide (Reverted Layout) ── */
+  .s14-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    width: 100%;
+    max-width: 1180px;
+    margin-top: 12px;
+  }
+
+  .s14-col h2 {
+    font-size: 25px;
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 8px;
+    margin-bottom: 24px;
+    color: #ffffff;
+  }
+
+  .s14-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .s14-list li {
+    font-size: 16.5px;
+    line-height: 1.55;
+    color: #d0d0d8;
+    position: relative;
+    padding-left: 26px;
+  }
+
+  .s14-list li::before {
+    content: "\2022";
+    position: absolute;
+    left: 0;
+    top: -3px;
+    font-size: 24px;
+    color: #ffffff;
+  }
+
+  .s14-list li strong {
+    color: #ffffff;
+    font-weight: 700;
+  }
+
+  .s14-highlight {
+    color: #00d4aa !important;
+  }
+
   @media (max-width: 960px) {
     .custom-slide { padding: 24px 22px 84px; }
-    .s2-frame, .grid-2, .grid-3, .s11-pods-row, .s16-grid {
+    .s2-frame, .grid-2, .grid-3, .s11-pods-row, .s16-grid, .s14-grid {
       grid-template-columns: 1fr;
     }
     .key-hint { display: none; }
@@ -925,78 +977,32 @@
     <img src="slides_img/slide_1.png" class="slide-img" alt="Credit Builder Flow Presentation Cover">
   </div>
 
-  <!-- SLIDE 2: Performance-Based Partnership & Destination Math (Moved before Introduction) -->
-  <div class="slide" data-slide="2" data-title="Commercials & Live Destination Math">
+  <!-- SLIDE 2: Origin & 80%+ Approval Mission (Script Block 8) -->
+  <div class="slide" data-slide="2" data-title="Origin & 80%+ Approval Mission">
     <div class="custom-slide">
-      <div class="slide-header" style="margin-bottom: 18px;">
-        <span class="slide-kicker">COMMERCIAL STRUCTURE &amp; DESTINATION MATH</span>
-        <h1 class="slide-title underline-title" style="margin-bottom: 6px;">PERFORMANCE-BASED PARTNERSHIP</h1>
-      </div>
-
-      <div class="s16-grid">
-        <!-- Left Column: Pricing Structure -->
-        <div class="card">
-          <div class="s16-col-title">Pricing Structure:</div>
-          <ul class="check-list dot" style="gap: 16px;">
-            <li>
-              <strong>Vehicles Under R130,000:</strong><br>
-              <span style="color: var(--emerald); font-size: 19px; font-weight: 800;">R6,000 flat</span> handling fee upon successful delivery.
-            </li>
-            <li>
-              <strong>Vehicles R130,000 and Above:</strong><br>
-              <span style="color: var(--emerald); font-size: 19px; font-weight: 800;">5.0% of vehicle retail price</span> upon successfully funded delivery.
-            </li>
-            <li>
-              <strong>R0 Upfront Cost · R0 Monthly Retainers · R0 Tech Fees.</strong>
-            </li>
-            <li>
-              <strong>Pure Contingency:</strong> Payable ONLY once the vehicle is delivered and funded by the bank.
-            </li>
-            <li>
-              <strong>Zero Risk Guarantee:</strong> If the buyer does not take delivery from your floor, you owe us <strong>R0</strong>.
-            </li>
-          </ul>
+      <div class="s2-frame">
+        <div class="s2-story">
+          <span class="slide-kicker">WHY WE BUILT THIS</span>
+          <h2>INTRODUCTION</h2>
+          <p>
+            We originally started as <strong>Volve Media</strong> — an automotive advertising agency generating thousands of buyer leads for dealerships across South Africa.
+          </p>
+          <p>
+            The ads worked and showrooms were full, yet month after month Dealer Principals told us the exact same thing:
+          </p>
+          <div class="s2-quote">
+            "Guys, the leads are here — but over half of them are getting declined at the bank."
+          </div>
+          <p style="margin-bottom: 0;">
+            We refused to be just another agency dumping raw traffic onto an F&amp;I desk. We built <strong>Credit Builder Flow (CBF)</strong> to solve the credit bottleneck directly — turning declined showroom shoppers into bank-approved deliveries without adding work to your floor.
+          </p>
         </div>
 
-        <!-- Right Column: Live Destination Math -->
-        <div class="card emerald">
-          <div class="s16-col-title" style="margin-bottom: 12px;">Your Floor's Destination Math:</div>
-
-          <div class="math-inputs">
-            <div class="math-field">
-              <label for="calc-apps">Monthly Apps</label>
-              <input type="number" id="calc-apps" value="50" min="5" step="5">
-            </div>
-            <div class="math-field">
-              <label for="calc-decline">Decline Rate (%)</label>
-              <input type="number" id="calc-decline" value="50" min="5" max="95" step="5">
-            </div>
-            <div class="math-field">
-              <label for="calc-margin">Avg Gross / Deal (R)</label>
-              <input type="number" id="calc-margin" value="20000" min="5000" step="1000">
-            </div>
-            <div class="math-field">
-              <label for="calc-recovered">Recovered Deals / Mo</label>
-              <input type="number" id="calc-recovered" value="5" min="1" max="50" step="1">
-            </div>
-          </div>
-
-          <div class="math-results">
-            <div class="math-kpi bleed">
-              <div class="math-kpi-label">CRM Graveyard Bleed</div>
-              <div class="math-kpi-val" style="color: var(--red);" id="out-monthly-bleed">R 500,000 / mo</div>
-              <div class="math-kpi-sub"><span id="out-declined-units">25</span> declined buyers generating R0</div>
-            </div>
-
-            <div class="math-kpi gain">
-              <div class="math-kpi-label">Found Gross Profit</div>
-              <div class="math-kpi-val" style="color: var(--emerald);" id="out-recovered-rev">R 100,000 / mo</div>
-              <div class="math-kpi-sub">Just <span id="out-recovered-units">5</span> recovered units (<span id="out-annual-rev">R 1,200,000</span>/yr)</div>
-            </div>
-          </div>
-
-          <p style="font-family:'Inter',sans-serif; font-size: 13.5px; color: var(--text-body); line-height: 1.5; margin-top: 4px;">
-            Unlocking <strong style="color: var(--emerald);">found money</strong> from leads you already paid for — with <strong>zero capital risk</strong>.
+        <div class="s2-mission-box">
+          <div class="s2-mission-stat">80%+</div>
+          <div class="s2-mission-label">Bank Finance Approval Rate</div>
+          <p class="s2-mission-desc">
+            The only automotive agency and recovery engine in South Africa engineered to clear bank underwriting hurdles and deliver an <strong>80%+ finance approval rate</strong> on the buyers we bring to your showroom.
           </p>
         </div>
       </div>
@@ -1630,8 +1636,58 @@
     </div>
   </div>
 
-  <!-- SLIDE 21: Thank You (Original Canva Slide) -->
-  <div class="slide" data-slide="21" data-title="Thank You — Volve Media">
+  <!-- SLIDE 21: Performance-Based Partnership (Reverted Closing Commercials & Benefits Slide) -->
+  <div class="slide" data-slide="21" data-title="Performance-Based Partnership">
+    <div class="custom-slide">
+      <h1 class="underline-title" style="margin-bottom: 36px;">
+        PERFORMANCE-BASED PARTNERSHIP
+      </h1>
+
+      <div class="s14-grid">
+        <!-- Left Column: Pricing Structure -->
+        <div class="s14-col">
+          <h2>Pricing Structure:</h2>
+          <ul class="s14-list">
+            <li>
+              <strong>All Vehicle Price Brackets:</strong><br>
+              <span class="s14-highlight" style="font-size: 20px; font-weight: 800;">R6,000 flat (incl. VAT)</span> per successfully recovered deal.
+            </li>
+            <li>
+              <strong>Zero Retainers:</strong> No monthly subscriptions, setup costs, or hidden &ldquo;platform fees&rdquo;.
+            </li>
+            <li>
+              <strong>Pure Contingency:</strong> We only earn when you successfully close and bank a deal from a CBF-recovered buyer.
+            </li>
+            <li>
+              <strong>Zero Risk Guarantee:</strong> If the customer does not take delivery of a car from your floor, you owe R0.
+            </li>
+          </ul>
+        </div>
+
+        <!-- Right Column: Dealership Benefits -->
+        <div class="s14-col">
+          <h2>Dealership Benefits:</h2>
+          <ul class="s14-list">
+            <li>
+              <strong>100% Risk-Free:</strong> No upfront capital expenditure (CAPEX) required. Risk-free entry into the system.
+            </li>
+            <li>
+              <strong>Exclusively Protected:</strong> Contractual ring-fencing routing every rehabilitated buyer strictly back to your showroom floor.
+            </li>
+            <li>
+              <strong>Recover &ldquo;Lost&rdquo; Revenue:</strong> Turn cold turn-downs and &ldquo;failed-credit&rdquo; files into bankable showroom deliveries.
+            </li>
+            <li>
+              <strong>Seamless Integration:</strong> Zero additional administrative burden for your F&amp;I team &mdash; 30 seconds to refer, we handle the rest off-site.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 22: Thank You (Original Canva Slide) -->
+  <div class="slide" data-slide="22" data-title="Thank You — Volve Media">
     <img src="slides_img/slide_15.png" class="slide-img" alt="Thank You - Volve Media Present by Kea">
   </div>
 
@@ -1653,7 +1709,7 @@
     <div class="progress-bar" id="progressBar"></div>
   </div>
   <div class="key-hint"><strong>[Space]</strong> / <strong>[→]</strong> Next &nbsp;|&nbsp; <strong>[G]</strong> Slides &nbsp;|&nbsp; <strong>[F]</strong> Fullscreen</div>
-  <button class="slide-indicator" id="slideIndicator" title="Open Slide Index [G]">01 / 21</button>
+  <button class="slide-indicator" id="slideIndicator" title="Open Slide Index [G]">01 / 22</button>
   <button class="nav-btn" id="nextBtn" onclick="navigate(1)">Next →</button>
 </div>
 
@@ -1704,7 +1760,7 @@
     showSlide(currentSlide);
   }
 
-  // Destination Math Calculator (Synced to Slide 16 & Slide 17)
+  // Destination Math Calculator (optional, only runs if inputs exist)
   const calcApps = document.getElementById('calc-apps');
   const calcDecline = document.getElementById('calc-decline');
   const calcMargin = document.getElementById('calc-margin');
@@ -1715,6 +1771,7 @@
   }
 
   function updateDestinationMath() {
+    if (!calcApps || !calcDecline || !calcMargin || !calcRecovered) return;
     const apps = Math.max(0, Number(calcApps.value) || 0);
     const declinePct = Math.max(0, Math.min(100, Number(calcDecline.value) || 0));
     const margin = Math.max(0, Number(calcMargin.value) || 0);
@@ -1725,23 +1782,33 @@
     const recoveredRev = recovered * margin;
     const annualRev = recoveredRev * 12;
 
-    document.getElementById('out-declined-units').textContent = declinedUnits;
-    document.getElementById('out-monthly-bleed').textContent = formatRand(monthlyBleed) + ' / mo';
-    document.getElementById('out-recovered-units').textContent = recovered;
-    document.getElementById('out-recovered-rev').textContent = formatRand(recoveredRev) + ' / mo';
-    document.getElementById('out-annual-rev').textContent = formatRand(annualRev);
+    const outDeclined = document.getElementById('out-declined-units');
+    const outBleed = document.getElementById('out-monthly-bleed');
+    const outRecUnits = document.getElementById('out-recovered-units');
+    const outRecRev = document.getElementById('out-recovered-rev');
+    const outAnnual = document.getElementById('out-annual-rev');
+    if (outDeclined) outDeclined.textContent = declinedUnits;
+    if (outBleed) outBleed.textContent = formatRand(monthlyBleed) + ' / mo';
+    if (outRecUnits) outRecUnits.textContent = recovered;
+    if (outRecRev) outRecRev.textContent = formatRand(recoveredRev) + ' / mo';
+    if (outAnnual) outAnnual.textContent = formatRand(annualRev);
 
-    // Sync Slide 17 (The 3 Decisions)
-    document.getElementById('d1-bleed').textContent = formatRand(monthlyBleed);
-    document.getElementById('d3-declined').textContent = declinedUnits;
-    document.getElementById('d3-units').textContent = recovered;
-    document.getElementById('d3-rev').textContent = formatRand(recoveredRev);
+    const d1Bleed = document.getElementById('d1-bleed');
+    const d3Declined = document.getElementById('d3-declined');
+    const d3Units = document.getElementById('d3-units');
+    const d3Rev = document.getElementById('d3-rev');
+    if (d1Bleed) d1Bleed.textContent = formatRand(monthlyBleed);
+    if (d3Declined) d3Declined.textContent = declinedUnits;
+    if (d3Units) d3Units.textContent = recovered;
+    if (d3Rev) d3Rev.textContent = formatRand(recoveredRev);
   }
 
-  [calcApps, calcDecline, calcMargin, calcRecovered].forEach((input) => {
-    input.addEventListener('input', updateDestinationMath);
-  });
-  updateDestinationMath();
+  if (calcApps && calcDecline && calcMargin && calcRecovered) {
+    [calcApps, calcDecline, calcMargin, calcRecovered].forEach((input) => {
+      input.addEventListener('input', updateDestinationMath);
+    });
+    updateDestinationMath();
+  }
 
   // Slide Index Triggers
   document.getElementById('slideIndicator').addEventListener('click', () => toggleIndex());

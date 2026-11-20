@@ -1,4 +1,4 @@
-const CACHE_NAME = 'cbf-pitch-deck-v4.1-1';
+const CACHE_NAME = 'cbf-pitch-deck-v4.2-1';
 const ASSETS = [
   './',
   './index.html',
